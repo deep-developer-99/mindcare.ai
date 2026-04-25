@@ -1122,6 +1122,7 @@
         verifyRequest = fetch(VERIFY_ENDPOINT, {
           method: 'GET',
           credentials: 'include',
+          headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
           cache: 'no-store'
         })
           .then((response) => response.ok)
@@ -1225,7 +1226,8 @@
           try {
             const res = await fetch(`${CONFIG.getApiBase()}/api/newsletter/subscribe`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
               body: JSON.stringify({ name, email })
             });
             const data = await res.json();

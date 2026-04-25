@@ -159,7 +159,8 @@
     try {
       const response = await fetch(FORGOT_REQUEST_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
         body: JSON.stringify({
           channel,
           identifier: identifierValue
@@ -214,7 +215,8 @@
     try {
       const response = await fetch(FORGOT_VERIFY_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
         body: JSON.stringify({
           channel: forgotState.channel,
           identifier: forgotState.identifier,
@@ -265,7 +267,8 @@
     try {
       const response = await fetch(FORGOT_RESET_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
         body: JSON.stringify({
           resetToken: forgotState.resetToken,
           newPassword,
@@ -361,7 +364,8 @@
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '')
         },
         body: JSON.stringify({ identifier: idVal, password: pwdVal })
       });
@@ -376,7 +380,12 @@
 
       clearFieldError(identifier, idErr);
       clearFieldError(password, pwErr);
-      localStorage.removeItem('mindcare_token');
+      
+      if (result.token) {
+        localStorage.setItem('mindcare_token', result.token);
+      } else {
+        localStorage.removeItem('mindcare_token');
+      }
 
       if (rememberChk && rememberChk.checked) {
         localStorage.setItem('mindcare_user_email', result.user.email);

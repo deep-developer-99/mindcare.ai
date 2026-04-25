@@ -15,6 +15,7 @@
       fetch(`${API_BASE}/api/auth/verify`, {
         method: 'GET',
         credentials: 'include',
+        headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
         cache: 'no-store'
       })
         .then(async (response) => {
@@ -663,6 +664,7 @@
         const response = await fetch(PROFILE_ENDPOINT, {
           method: 'GET',
           credentials: 'include',
+          headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
           cache: 'no-store'
         });
 
@@ -716,7 +718,8 @@
             const response = await fetch(PROFILE_ENDPOINT, {
               method: 'PUT',
               credentials: 'include',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
               body: JSON.stringify(payload)
             });
 
@@ -771,7 +774,8 @@
             const response = await fetch(PASSWORD_ENDPOINT, {
               method: 'PUT',
               credentials: 'include',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
               body: JSON.stringify({ currentPassword, newPassword, confirmPassword })
             });
 
@@ -819,7 +823,8 @@
             const response = await fetch(PROFILE_ENDPOINT, {
               method: 'DELETE',
               credentials: 'include',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
               body: JSON.stringify({ reason, confirmed })
             });
 
@@ -833,6 +838,7 @@
             }
 
             showDeleteStatus(result.message || 'Account deleted successfully.', 'success');
+            localStorage.removeItem('mindcare_token');
             setTimeout(() => {
               window.location.href = HOME_PAGE_URL;
             }, 900);

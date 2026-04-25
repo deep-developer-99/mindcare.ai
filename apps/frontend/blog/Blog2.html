@@ -546,6 +546,7 @@
                 verifyRequest = fetch(VERIFY_ENDPOINT, {
                     method: 'GET',
                     credentials: 'include',
+                    headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
                     cache: 'no-store'
                 })
                     .then((response) => response.ok)

@@ -483,7 +483,8 @@
             const response = await fetch(`${CONFIG.getJarvisUrl()}/api/chat`, {
                 method: 'POST',
                 credentials: 'include',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
                 body: JSON.stringify({ message: text, userId: currentUserId })
             });
             

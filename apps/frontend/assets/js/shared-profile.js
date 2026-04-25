@@ -63,7 +63,8 @@
         try {
           const response = await fetch(LOGOUT_ENDPOINT, {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include',
+            headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') }
           });
 
           if (!response.ok) {
@@ -75,6 +76,7 @@
             root.style.display = 'none';
           });
 
+          localStorage.removeItem('mindcare_token');
           window.location.href = HOME_PAGE_URL;
         } catch (error) {
           console.error(error);

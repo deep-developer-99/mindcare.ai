@@ -17,6 +17,7 @@
             fetch(`${API_BASE}/api/auth/verify`, {
                 method: 'GET',
                 credentials: 'include',
+                headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
                 cache: 'no-store'
             })
                 .then((response) => {
@@ -307,7 +308,8 @@
         try {
             const response = await fetch(`${CONFIG.getNutrimateUrl()}/api/diet`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
                 body: JSON.stringify(userData)
             });
 
