@@ -75,14 +75,11 @@
             root.classList.remove('open');
             root.style.display = 'none';
           });
-
+        } catch (error) {
+          console.error('Logout API failed, but local session will be cleared:', error);
+        } finally {
           localStorage.removeItem('mindcare_token');
           window.location.href = HOME_PAGE_URL;
-        } catch (error) {
-          console.error(error);
-          alert('Logout failed. Please try again.');
-          logoutButton.disabled = false;
-          logoutButton.textContent = originalLabel;
         }
       });
     });
