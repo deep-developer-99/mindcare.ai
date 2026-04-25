@@ -6,7 +6,7 @@
   const SETTINGS_PAGE_URL = window.location.protocol === 'file:'
     ? (IS_BLOG_PAGE ? '../user-dashboard.html' : 'user-dashboard.html')
     : '/user-dashboard.html';
-  const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+  const API_BASE = CONFIG ? CONFIG.getApiBase() : (window.location.protocol === 'file:' ? 'http://localhost:5002' : '');
   const LOGOUT_ENDPOINT = `${API_BASE}/api/auth/logout`;
 
   function closeProfileMenus(exceptRoot) {

@@ -75,7 +75,7 @@
     const successEl = document.getElementById('newsletter-success');
     const errorEl = document.getElementById('newsletter-error');
     const submitBtn = document.getElementById('nl-submit');
-    const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+    const API_BASE = CONFIG ? CONFIG.getApiBase() : (window.location.protocol === 'file:' ? 'http://localhost:5002' : '');
 
     successEl.style.display = 'none';
     errorEl.style.display = 'none';

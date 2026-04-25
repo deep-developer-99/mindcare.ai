@@ -9,6 +9,9 @@
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Environment Configuration -->
+  <script src="assets/js/config.js"></script>
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="assets/css/cursor.css" />
   <link rel="stylesheet" href="assets/css/shared-profile.css" />
@@ -1110,7 +1113,7 @@
   <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
   <script>
     const LOGIN_PAGE_URL = '/auth/login-page/index.html';
-    const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+    const API_BASE = CONFIG.getApiBase();
     const VERIFY_ENDPOINT = `${API_BASE}/api/auth/verify`;
     let verifyRequest = null;
 
@@ -1220,7 +1223,7 @@
           btn.disabled = true;
 
           try {
-            const res = await fetch('http://localhost:5002/api/newsletter/subscribe', {
+            const res = await fetch(`${CONFIG.getApiBase()}/api/newsletter/subscribe`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ name, email })

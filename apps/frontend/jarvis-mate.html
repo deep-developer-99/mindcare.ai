@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="assets/css/cursor.css" />
     <link rel="stylesheet" href="assets/css/shared-footer.css" />
     <link rel="stylesheet" href="assets/css/shared-profile.css" />
+    <script src="assets/js/config.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -348,7 +349,7 @@
     // Authentication Guard
     async function checkAuth() {
         try {
-            const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+            const API_BASE = CONFIG.getApiBase();
             const response = await fetch(`${API_BASE}/api/auth/verify`, {
                 credentials: 'include'
             });

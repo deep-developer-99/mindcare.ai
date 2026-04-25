@@ -1,0 +1,5 @@
+# API proxy redirects
+/api/* https://your-api-domain.com/:splat 200
+
+# SPA routing
+/* /Him2.html 200

@@ -5,10 +5,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Yoga Guide — MindCare AI</title>
+  <script src="assets/js/config.js"></script>
   <script>
     (function () {
       const LOGIN_PAGE_URL = '/auth/login-page/index.html';
-      const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+      const API_BASE = CONFIG.getApiBase();
       document.documentElement.style.visibility = 'hidden';
       fetch(`${API_BASE}/api/auth/verify`, {
         method: 'GET',

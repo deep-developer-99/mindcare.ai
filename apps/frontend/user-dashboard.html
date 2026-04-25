@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Dashboard - MindCare AI</title>
+  <script src="assets/js/config.js"></script>
   <script>
     (function () {
       const LOGIN_PAGE_URL = '/auth/login-page/index.html';
-      const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+      const API_BASE = CONFIG.getApiBase();
       window.__dashboardUser = null;
       document.documentElement.style.visibility = 'hidden';
 
@@ -523,7 +524,7 @@
 
   <script>
     (function () {
-      const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+      const API_BASE = CONFIG.getApiBase();
       const PROFILE_ENDPOINT = `${API_BASE}/api/auth/me`;
       const PASSWORD_ENDPOINT = `${API_BASE}/api/auth/password`;
       const HOME_PAGE_URL = window.location.protocol === 'file:' ? 'Him2.html' : '/Him2.html';

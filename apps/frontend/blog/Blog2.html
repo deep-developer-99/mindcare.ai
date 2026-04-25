@@ -7,6 +7,8 @@
     <title>MindCare AI | Blog</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Environment Configuration -->
+    <script src="../assets/js/config.js"></script>
     <!-- Use Inter font family -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600;700;800&display=swap');
@@ -535,7 +537,7 @@
         const LOGIN_PAGE_URL = window.location.protocol === 'file:'
             ? (IS_BLOG_PAGE ? '../auth/login-page/index.html' : 'auth/login-page/index.html')
             : '/auth/login-page/index.html';
-        const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+        const API_BASE = CONFIG.getApiBase();
         const VERIFY_ENDPOINT = `${API_BASE}/api/auth/verify`;
         let verifyRequest = null;
 

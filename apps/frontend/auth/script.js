@@ -3,7 +3,7 @@
   const mentalRadios = document.querySelectorAll('input[name="mental"]');
   const mentalDetails = document.getElementById('mentalDetails');
   const message = document.getElementById('message');
-  const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+  const API_BASE = CONFIG ? CONFIG.getApiBase() : (window.location.protocol === 'file:' ? 'http://localhost:5002' : '');
   const AUTH_BASE = `${API_BASE}/api/auth`;
 
   function toggleDetails(){
