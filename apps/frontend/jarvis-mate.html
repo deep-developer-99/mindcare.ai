@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MATE - AI Assistant</title>
     <link rel="stylesheet" href="assets/css/cursor.css" />
     <link rel="stylesheet" href="assets/css/shared-footer.css" />
@@ -11,18 +11,22 @@
     <script>
       // Auth guard - verify session before page loads
       (function () {
-        const LOGIN_PAGE_URL = '/auth/login-page/index.html';
+        const LOGIN_PAGE_URL = "/auth/login-page/index.html";
         const API_BASE = CONFIG.getApiBase();
-        document.documentElement.style.visibility = 'hidden';
+        document.documentElement.style.visibility = "hidden";
 
         fetch(`${API_BASE}/api/auth/verify`, {
-          method: 'GET',
-          credentials: 'include',
-          cache: 'no-store'
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization:
+              "Bearer " + (localStorage.getItem("mindcare_token") || ""),
+          },
+          cache: "no-store",
         })
           .then((response) => {
             if (response.ok) {
-              document.documentElement.style.visibility = 'visible';
+              document.documentElement.style.visibility = "visible";
             } else {
               window.location.replace(LOGIN_PAGE_URL);
             }
@@ -33,483 +37,603 @@
       })();
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-        /* Basic Reset and Container Styling */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: radial-gradient(900px 500px at 10% 15%, rgba(244, 63, 94, 0.15), transparent 40%),
-                        radial-gradient(700px 400px at 90% 80%, rgba(56, 189, 248, 0.15), transparent 40%),
-                        linear-gradient(135deg, #070a13 0%, #111827 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
-            color: #e5e7eb;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .mc-top-nav {
-            position: sticky;
-            top: 10px;
-            z-index: 50;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto 22px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(8px);
-        }
-        .mc-top-nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 8px 14px;
-        }
-        .mc-top-nav a {
-            color: #cbd5e1;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.92rem;
-            transition: color 0.2s ease;
-        }
-        .mc-top-nav a:hover {
-            color: #38bdf8;
-        }
-        .mc-top-nav a.active {
-            color: #f43f5e;
-        }
+      /* Basic Reset and Container Styling */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background:
+          radial-gradient(
+            900px 500px at 10% 15%,
+            rgba(244, 63, 94, 0.15),
+            transparent 40%
+          ),
+          radial-gradient(
+            700px 400px at 90% 80%,
+            rgba(56, 189, 248, 0.15),
+            transparent 40%
+          ),
+          linear-gradient(135deg, #070a13 0%, #111827 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+        color: #e5e7eb;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
+      .mc-top-nav {
+        position: sticky;
+        top: 10px;
+        z-index: 50;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 22px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+      }
+      .mc-top-nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 8px 14px;
+      }
+      .mc-top-nav a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.92rem;
+        transition: color 0.2s ease;
+      }
+      .mc-top-nav a:hover {
+        color: #38bdf8;
+      }
+      .mc-top-nav a.active {
+        color: #f43f5e;
+      }
+
+      .chat-container {
+        width: 100%;
+        max-width: 900px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 24px;
+        box-shadow:
+          0 16px 40px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        flex-direction: column;
+        height: 70vh;
+        min-height: 500px;
+        overflow: hidden;
+        margin-bottom: 40px;
+      }
+
+      .chat-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center;
+      }
+
+      .chat-header h1 {
+        margin: 0;
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #38bdf8, #c084fc, #f43f5e);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .chat-messages {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .message {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        line-height: 1.5;
+        font-size: 1rem;
+        word-wrap: break-word;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .message.user {
+        align-self: flex-end;
+        background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+        color: white;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2);
+      }
+
+      .message.ai {
+        align-self: flex-start;
+        background: rgba(11, 18, 32, 0.8);
+        color: #e2e8f0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom-left-radius: 4px;
+      }
+
+      .chat-input-area {
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input {
+        flex-grow: 1;
+        padding: 14px 20px;
+        background: rgba(11, 18, 32, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 30px;
+        color: white;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+
+      .chat-input:focus {
+        border-color: #38bdf8;
+        box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
+        background: rgba(11, 18, 32, 0.85);
+      }
+
+      .send-btn {
+        background: linear-gradient(135deg, #38bdf8, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+        box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+      }
+
+      .send-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+      }
+
+      .send-btn svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+        transform: translateX(2px);
+      }
+
+      .mic-btn {
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .mic-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+      }
+
+      .mic-btn.recording {
+        background: rgba(244, 63, 94, 0.2);
+        color: #f43f5e;
+        border-color: rgba(244, 63, 94, 0.4);
+        animation: pulse-red 1.5s infinite;
+      }
+
+      @keyframes pulse-red {
+        0% {
+          box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(244, 63, 94, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+        }
+      }
+
+      .speaker-btn {
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .speaker-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #e2e8f0;
+      }
+
+      .speaker-btn.active {
+        color: #38bdf8;
+        background: rgba(56, 189, 248, 0.1);
+        border-color: rgba(56, 189, 248, 0.3);
+      }
+
+      .typing-indicator {
+        display: none;
+        align-self: flex-start;
+        background: rgba(11, 18, 32, 0.8);
+        padding: 12px 16px;
+        border-radius: 18px;
+        border-bottom-left-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-top: 10px;
+      }
+
+      .dot {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        background-color: #94a3b8;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: bounce 1.4s infinite ease-in-out both;
+      }
+
+      .dot:nth-child(1) {
+        animation-delay: -0.32s;
+      }
+      .dot:nth-child(2) {
+        animation-delay: -0.16s;
+      }
+
+      @keyframes bounce {
+        0%,
+        80%,
+        100% {
+          transform: scale(0);
+        }
+        40% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
         .chat-container {
-            width: 100%;
-            max-width: 900px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 24px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            flex-direction: column;
-            height: 70vh;
-            min-height: 500px;
-            overflow: hidden;
-            margin-bottom: 40px;
+          height: 80vh;
+          border-radius: 16px;
         }
-
-        .chat-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .chat-header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #38bdf8, #c084fc, #f43f5e);
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
         .message {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            line-height: 1.5;
-            font-size: 1rem;
-            word-wrap: break-word;
-            animation: fadeIn 0.3s ease-out;
+          max-width: 90%;
         }
-
-        .message.user {
-            align-self: flex-end;
-            background: linear-gradient(135deg, #f43f5e, #8b5cf6);
-            color: white;
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2);
-        }
-
-        .message.ai {
-            align-self: flex-start;
-            background: rgba(11, 18, 32, 0.8);
-            color: #e2e8f0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom-left-radius: 4px;
-        }
-
-        .chat-input-area {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input {
-            flex-grow: 1;
-            padding: 14px 20px;
-            background: rgba(11, 18, 32, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 30px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .chat-input:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
-            background: rgba(11, 18, 32, 0.85);
-        }
-
-        .send-btn {
-            background: linear-gradient(135deg, #38bdf8, #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
-        }
-
-        .send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
-        }
-
-        .send-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-            transform: translateX(2px);
-        }
-
-        .mic-btn {
-            background: rgba(255, 255, 255, 0.05);
-            color: #94a3b8;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .mic-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-        }
-
-        .mic-btn.recording {
-            background: rgba(244, 63, 94, 0.2);
-            color: #f43f5e;
-            border-color: rgba(244, 63, 94, 0.4);
-            animation: pulse-red 1.5s infinite;
-        }
-
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
-        }
-
-        .speaker-btn {
-            background: rgba(255, 255, 255, 0.05);
-            color: #94a3b8;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .speaker-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-        }
-        
-        .speaker-btn.active {
-            color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        .typing-indicator {
-            display: none;
-            align-self: flex-start;
-            background: rgba(11, 18, 32, 0.8);
-            padding: 12px 16px;
-            border-radius: 18px;
-            border-bottom-left-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 10px;
-        }
-
-        .dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: #94a3b8;
-            border-radius: 50%;
-            margin: 0 2px;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            .chat-container { height: 80vh; border-radius: 16px; }
-            .message { max-width: 90%; }
-        }
+      }
     </style>
-</head>
-<body>
-
-<nav class="mc-top-nav" aria-label="Primary">
-    <div class="mc-top-nav-links">
+  </head>
+  <body>
+    <nav class="mc-top-nav" aria-label="Primary">
+      <div class="mc-top-nav-links">
         <a href="Him2.html">Home</a>
         <a href="jarvis-mate.html" class="active">Talk to AI</a>
         <a href="yoga.html">Yoga Guide</a>
         <a href="blog/Blog2.html">Blog</a>
         <a href="nutrimate-ai.html">Nutritionist</a>
-    </div>
-</nav>
+      </div>
+    </nav>
 
-<div class="chat-container">
-    <div class="chat-header" style="display: flex; justify-content: space-between; align-items: center;">
-        <div style="width: 40px;"></div> <!-- placeholder -->
-        <h1 style="flex-grow: 1; text-align: center; margin: 0;">MATE AI</h1>
-        <button id="speaker-btn" class="speaker-btn active" aria-label="Toggle Voice" title="Voice Response: ON">
-            <svg id="speaker-on-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-            <svg id="speaker-off-icon" style="display: none;" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <line x1="23" y1="9" x2="17" y2="15"></line>
-                <line x1="17" y1="9" x2="23" y2="15"></line>
-            </svg>
+    <div class="chat-container">
+      <div
+        class="chat-header"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <div style="width: 40px"></div>
+        <!-- placeholder -->
+        <h1 style="flex-grow: 1; text-align: center; margin: 0">MATE AI</h1>
+        <button
+          id="speaker-btn"
+          class="speaker-btn active"
+          aria-label="Toggle Voice"
+          title="Voice Response: ON"
+        >
+          <svg
+            id="speaker-on-icon"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path
+              d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
+            ></path>
+          </svg>
+          <svg
+            id="speaker-off-icon"
+            style="display: none"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
         </button>
-    </div>
-    
-    <div class="chat-messages" id="chat-messages">
+      </div>
+
+      <div class="chat-messages" id="chat-messages">
         <div class="message ai">
-            Hello! I am MATE, your MindCare AI assistant. How can I support you today?
+          Hello! I am MATE, your MindCare AI assistant. How can I support you
+          today?
         </div>
-    </div>
-    
-    <div class="typing-indicator" id="typing-indicator">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-    </div>
+      </div>
 
-    <div class="chat-input-area">
-        <button id="mic-btn" class="mic-btn" aria-label="Use Microphone" title="Click to speak">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="22"></line>
-            </svg>
+      <div class="typing-indicator" id="typing-indicator">
+        <span class="dot"></span><span class="dot"></span
+        ><span class="dot"></span>
+      </div>
+
+      <div class="chat-input-area">
+        <button
+          id="mic-btn"
+          class="mic-btn"
+          aria-label="Use Microphone"
+          title="Click to speak"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"
+            ></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
         </button>
-        <input type="text" id="chat-input" class="chat-input" placeholder="Type your message here..." autocomplete="off">
+        <input
+          type="text"
+          id="chat-input"
+          class="chat-input"
+          placeholder="Type your message here..."
+          autocomplete="off"
+        />
         <button id="send-btn" class="send-btn" aria-label="Send message">
-            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+          <svg viewBox="0 0 24 24">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+          </svg>
         </button>
+      </div>
     </div>
-</div>
 
-<script>
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-    const sendBtn = document.getElementById('send-btn');
-    const typingIndicator = document.getElementById('typing-indicator');
-    const micBtn = document.getElementById('mic-btn');
-    const speakerBtn = document.getElementById('speaker-btn');
-    const speakerOnIcon = document.getElementById('speaker-on-icon');
-    const speakerOffIcon = document.getElementById('speaker-off-icon');
+    <script>
+      const chatMessages = document.getElementById("chat-messages");
+      const chatInput = document.getElementById("chat-input");
+      const sendBtn = document.getElementById("send-btn");
+      const typingIndicator = document.getElementById("typing-indicator");
+      const micBtn = document.getElementById("mic-btn");
+      const speakerBtn = document.getElementById("speaker-btn");
+      const speakerOnIcon = document.getElementById("speaker-on-icon");
+      const speakerOffIcon = document.getElementById("speaker-off-icon");
 
-    let currentUserId = null;
+      let currentUserId = null;
 
-    // Authentication Guard
-    async function checkAuth() {
+      // Authentication Guard
+      async function checkAuth() {
         try {
-            const API_BASE = CONFIG.getApiBase();
-            const response = await fetch(`${API_BASE}/api/auth/verify`, {
-                credentials: 'include',
-                headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') }
-            });
-            const data = await response.json();
-            
-            if (response.ok && data.authenticated && data.user) {
-                currentUserId = data.user.id;
-            } else {
-                window.location.href = '/auth/login-page/index.html';
-            }
+          const API_BASE = CONFIG.getApiBase();
+          const response = await fetch(`${API_BASE}/api/auth/verify`, {
+            credentials: "include",
+            headers: {
+              Authorization:
+                "Bearer " + (localStorage.getItem("mindcare_token") || ""),
+            },
+          });
+          const data = await response.json();
+
+          if (response.ok && data.authenticated && data.user) {
+            currentUserId = data.user.id;
+          } else {
+            window.location.href = "/auth/login-page/index.html";
+          }
         } catch (error) {
-            console.error('Auth check failed:', error);
-            window.location.href = '/auth/login-page/index.html';
+          console.error("Auth check failed:", error);
+          window.location.href = "/auth/login-page/index.html";
         }
-    }
+      }
 
-    // Run auth check immediately
-    checkAuth();
+      // Run auth check immediately
+      checkAuth();
 
-    speakerBtn.addEventListener('click', () => {
-        speakerBtn.classList.toggle('active');
-        if (speakerBtn.classList.contains('active')) {
-            speakerOnIcon.style.display = 'block';
-            speakerOffIcon.style.display = 'none';
-            speakerBtn.title = 'Voice Response: ON';
+      speakerBtn.addEventListener("click", () => {
+        speakerBtn.classList.toggle("active");
+        if (speakerBtn.classList.contains("active")) {
+          speakerOnIcon.style.display = "block";
+          speakerOffIcon.style.display = "none";
+          speakerBtn.title = "Voice Response: ON";
         } else {
-            speakerOnIcon.style.display = 'none';
-            speakerOffIcon.style.display = 'block';
-            speakerBtn.title = 'Voice Response: OFF';
-            window.speechSynthesis.cancel(); // Stop speaking immediately
+          speakerOnIcon.style.display = "none";
+          speakerOffIcon.style.display = "block";
+          speakerBtn.title = "Voice Response: OFF";
+          window.speechSynthesis.cancel(); // Stop speaking immediately
         }
-    });
+      });
 
-    // Web Speech API
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let recognition;
-    
-    if (SpeechRecognition) {
+      // Web Speech API
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+      let recognition;
+
+      if (SpeechRecognition) {
         recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.lang = 'en-US';
+        recognition.lang = "en-US";
 
-        recognition.onstart = function() {
-            micBtn.classList.add('recording');
-            chatInput.placeholder = 'Listening...';
+        recognition.onstart = function () {
+          micBtn.classList.add("recording");
+          chatInput.placeholder = "Listening...";
         };
 
-        recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            chatInput.value = transcript;
+        recognition.onresult = function (event) {
+          const transcript = event.results[0][0].transcript;
+          chatInput.value = transcript;
         };
 
-        recognition.onerror = function(event) {
-            console.error('Speech recognition error', event.error);
-            micBtn.classList.remove('recording');
-            chatInput.placeholder = 'Type your message here...';
+        recognition.onerror = function (event) {
+          console.error("Speech recognition error", event.error);
+          micBtn.classList.remove("recording");
+          chatInput.placeholder = "Type your message here...";
         };
 
-        recognition.onend = function() {
-            micBtn.classList.remove('recording');
-            chatInput.placeholder = 'Type your message here...';
+        recognition.onend = function () {
+          micBtn.classList.remove("recording");
+          chatInput.placeholder = "Type your message here...";
         };
 
-        micBtn.addEventListener('click', () => {
-            if (micBtn.classList.contains('recording')) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
+        micBtn.addEventListener("click", () => {
+          if (micBtn.classList.contains("recording")) {
+            recognition.stop();
+          } else {
+            recognition.start();
+          }
         });
-    } else {
-        micBtn.style.display = 'none'; // Hide if browser doesn't support it
-        console.warn('Speech Recognition API not supported in this browser.');
-    }
+      } else {
+        micBtn.style.display = "none"; // Hide if browser doesn't support it
+        console.warn("Speech Recognition API not supported in this browser.");
+      }
 
-    function addMessage(text, sender) {
-        const msgDiv = document.createElement('div');
+      function addMessage(text, sender) {
+        const msgDiv = document.createElement("div");
         msgDiv.className = `message ${sender}`;
         msgDiv.textContent = text;
         chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
-        if (sender === 'ai' && speakerBtn.classList.contains('active')) {
-            // Remove emojis so the browser TTS doesn't read them out loud
-            const textWithoutEmojis = text.replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '');
-            const utterance = new SpeechSynthesisUtterance(textWithoutEmojis);
-            utterance.lang = 'en-US';
-            window.speechSynthesis.speak(utterance);
+        if (sender === "ai" && speakerBtn.classList.contains("active")) {
+          // Remove emojis so the browser TTS doesn't read them out loud
+          const textWithoutEmojis = text.replace(
+            /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu,
+            "",
+          );
+          const utterance = new SpeechSynthesisUtterance(textWithoutEmojis);
+          utterance.lang = "en-US";
+          window.speechSynthesis.speak(utterance);
         }
-    }
+      }
 
-    async function sendMessage() {
+      async function sendMessage() {
         const text = chatInput.value.trim();
         if (!text) return;
 
         // Add user message
-        addMessage(text, 'user');
-        chatInput.value = '';
-        
+        addMessage(text, "user");
+        chatInput.value = "";
+
         // Show typing indicator
         chatMessages.appendChild(typingIndicator);
-        typingIndicator.style.display = 'block';
+        typingIndicator.style.display = "block";
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-            const response = await fetch(`${CONFIG.getJarvisUrl()}/api/chat`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: { 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') },
-                body: JSON.stringify({ message: text, userId: currentUserId })
-            });
-            
-            const data = await response.json();
-            typingIndicator.style.display = 'none';
-            
-            if (response.ok && data.response) {
-                addMessage(data.response, 'ai');
-            } else {
-                addMessage('Sorry, I encountered an error. Please try again.', 'ai');
-            }
+          const response = await fetch(`${CONFIG.getJarvisUrl()}/api/chat`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization:
+                "Bearer " + (localStorage.getItem("mindcare_token") || ""),
+            },
+            body: JSON.stringify({ message: text, userId: currentUserId }),
+          });
+
+          const data = await response.json();
+          typingIndicator.style.display = "none";
+
+          if (response.ok && data.response) {
+            addMessage(data.response, "ai");
+          } else {
+            addMessage(
+              "Sorry, I encountered an error. Please try again.",
+              "ai",
+            );
+          }
         } catch (error) {
-            console.error('Error:', error);
-            typingIndicator.style.display = 'none';
-            addMessage('Could not connect to the server. Is MATE running?', 'ai');
+          console.error("Error:", error);
+          typingIndicator.style.display = "none";
+          addMessage("Could not connect to the server. Is MATE running?", "ai");
         }
-    }
+      }
 
-    sendBtn.addEventListener('click', sendMessage);
-    chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-    });
-</script>
+      sendBtn.addEventListener("click", sendMessage);
+      chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
+    </script>
 
-<script src="assets/js/cursor.js"></script>
-</body>
+    <script src="assets/js/cursor.js"></script>
+  </body>
 </html>
