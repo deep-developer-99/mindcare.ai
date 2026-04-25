@@ -1,30 +1,62 @@
 /**
  * MindCare AI - Environment Configuration
  *
- * Update API_ENDPOINT based on your deployment environment:
- * - Local: http://localhost:5002
- * - Production: your-api-domain.com (e.g., https://api.mindcare.com)
+ * Handles 3 microservices:
+ * 1. BACKEND - Authentication, Newsletter, User Management
+ * 2. JARVIS_MATE - AI Chat Assistant (/api/chat)
+ * 3. NUTRIMATE - Nutrition AI (/api/diet)
+ *
+ * Development: All services run locally on different ports
+ * Production: Each service has its own domain/URL
  */
 
 const CONFIG = {
-  // Development
+  // ===== DEVELOPMENT (Local Ports) =====
   DEVELOPMENT: {
-    API_BASE: 'http://localhost:5002'
+    BACKEND: 'http://localhost:5002',        // Auth, Newsletter endpoints
+    JARVIS_MATE: 'http://localhost:5003',    // Chat AI service
+    NUTRIMATE: 'http://localhost:5004'       // Nutrition AI service
   },
 
-  // Production (update with your actual API endpoint)
+  // ===== PRODUCTION (Update with your deployment URLs) =====
   PRODUCTION: {
-    API_BASE: 'https://your-api-domain.com' // CHANGE THIS TO YOUR PRODUCTION API
+    BACKEND: 'https://backend-api.mindcare.com',      // ← Update this
+    JARVIS_MATE: 'https://jarvis-api.mindcare.com',   // ← Update this
+    NUTRIMATE: 'https://nutrimate-api.mindcare.com'   // ← Update this
   },
 
-  // Get appropriate config based on environment
-  getApiBase: function() {
-    // If running locally (file:// protocol or localhost)
+  // Detect environment and return appropriate config
+  getEnvironment: function() {
     if (window.location.protocol === 'file:' || window.location.hostname === 'localhost') {
-      return this.DEVELOPMENT.API_BASE;
+      return 'DEVELOPMENT';
     }
-    // Production environment
-    return this.PRODUCTION.API_BASE;
+    return 'PRODUCTION';
+  },
+
+  // Get appropriate base URL for a service
+  getApiBase: function(service = 'BACKEND') {
+    const env = this.getEnvironment();
+    const serviceConfig = this[env][service];
+
+    if (!serviceConfig) {
+      console.warn(`Service '${service}' not found in config. Using BACKEND fallback.`);
+      return this[env].BACKEND;
+    }
+
+    return serviceConfig;
+  },
+
+  // Helper methods for each service
+  getBackendUrl: function() {
+    return this.getApiBase('BACKEND');
+  },
+
+  getJarvisUrl: function() {
+    return this.getApiBase('JARVIS_MATE');
+  },
+
+  getNutrimateUrl: function() {
+    return this.getApiBase('NUTRIMATE');
   }
 };
 
