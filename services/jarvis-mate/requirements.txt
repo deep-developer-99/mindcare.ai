@@ -14,3 +14,5 @@ mtranslate
 edge-tts
 PyQt5
 webdriver-manager
+Flask
+flask-cors
