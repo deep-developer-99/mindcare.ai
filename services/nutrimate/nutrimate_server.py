@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 from nutrimate import generate_diet, calculate_bmi, bmi_type
 
 app = Flask(__name__)
@@ -32,5 +33,6 @@ def get_diet():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-if __name__ == '__main__':
-    app.run(port=5004, host='0.0.0.0')
+if __name__ == "__main__":
+    port = int(os.getenv("PORT", 5004))
+    app.run(host="0.0.0.0", port=port)
