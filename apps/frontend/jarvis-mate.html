@@ -375,7 +375,8 @@
         try {
             const API_BASE = CONFIG.getApiBase();
             const response = await fetch(`${API_BASE}/api/auth/verify`, {
-                credentials: 'include'
+                credentials: 'include',
+                headers: { 'Authorization': 'Bearer ' + (localStorage.getItem('mindcare_token') || '') }
             });
             const data = await response.json();
             
