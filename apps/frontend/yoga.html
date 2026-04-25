@@ -1,0 +1,1786 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Yoga Guide — MindCare AI</title>
+  <script>
+    (function () {
+      const LOGIN_PAGE_URL = '/auth/login-page/index.html';
+      const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+      document.documentElement.style.visibility = 'hidden';
+      fetch(`${API_BASE}/api/auth/verify`, {
+        method: 'GET',
+        credentials: 'include',
+        cache: 'no-store'
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error('Unauthorized');
+          document.documentElement.style.visibility = 'visible';
+        })
+        .catch(() => {
+          window.location.replace(LOGIN_PAGE_URL);
+        });
+    })();
+  </script>
+  <style>
+    :root {
+      --pink: #ff77d4;
+      --teal: #47e7ce;
+      --white: #ffffff;
+      --muted: rgba(255, 255, 255, 0.88);
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      /* kept your theme + readable text */
+      color: var(--white);
+      font-family: 'Segoe UI', Roboto, system-ui, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+
+    /* ===== Animated background wrapper (behind everything) ===== */
+    .animated-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background: linear-gradient(120deg, #060416 0%, #12042b 45%, #071228 100%);
+      background-size: 200% 200%;
+      animation: bgShift 28s linear infinite;
+      opacity: 0.82;
+    }
+
+    @keyframes bgShift {
+      0% {
+        background-position: 0% 50%
+      }
+
+      50% {
+        background-position: 100% 50%
+      }
+
+      100% {
+        background-position: 0% 50%
+      }
+    }
+
+    .bg-blobs {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .animated-wrap .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      opacity: 0.12;
+      transform: translateZ(0);
+      will-change: transform, opacity;
+    }
+
+    .blob.p1 {
+      width: 520px;
+      height: 520px;
+      left: -12%;
+      top: -8%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 119, 212, 1) 0%, rgba(255, 119, 212, 0.45) 40%, transparent 70%);
+      animation: blob1 26s ease-in-out infinite;
+    }
+
+    .blob.p2 {
+      width: 420px;
+      height: 420px;
+      right: -10%;
+      top: 18%;
+      background: radial-gradient(circle at 40% 40%, rgba(71, 231, 206, 1) 0%, rgba(71, 231, 206, 0.45) 40%, transparent 70%);
+      animation: blob2 30s ease-in-out infinite;
+    }
+
+    .blob.p3 {
+      width: 360px;
+      height: 360px;
+      left: 18%;
+      bottom: -12%;
+      background: radial-gradient(circle at 20% 30%, rgba(177, 140, 255, 1) 0%, rgba(177, 140, 255, 0.45) 40%, transparent 70%);
+      animation: blob3 24s ease-in-out infinite;
+    }
+
+    @keyframes blob1 {
+      0% {
+        transform: translate(0, 0)
+      }
+
+      50% {
+        transform: translate(34px, 40px) scale(1.03)
+      }
+
+      100% {
+        transform: translate(0, 0)
+      }
+    }
+
+    @keyframes blob2 {
+      0% {
+        transform: translate(0, 0)
+      }
+
+      50% {
+        transform: translate(-36px, -20px) scale(1.04)
+      }
+
+      100% {
+        transform: translate(0, 0)
+      }
+    }
+
+    @keyframes blob3 {
+      0% {
+        transform: translate(0, 0)
+      }
+
+      50% {
+        transform: translate(-18px, 28px) scale(1.02)
+      }
+
+      100% {
+        transform: translate(0, 0)
+      }
+    }
+
+    /* Canvas for small particles (depth) */
+    #bg-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 1;
+    }
+
+    /* Ensure content above animation */
+    .page-content {
+      position: relative;
+      z-index: 5;
+    }
+
+    /* NAVBAR (Home page style) */
+    .mc-nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      z-index: 1200;
+      background: rgba(0, 0, 0, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .nav-inner {
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .brand-logo {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .brand:hover .brand-logo {
+      border-color: #f43f5e;
+    }
+
+    .brand-text {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: #d1d5db;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      position: relative;
+      display: inline-block;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background-color: #f43f5e;
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      text-shadow: none;
+      transform: none;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      padding: 6px;
+      margin-left: 6px;
+    }
+
+    .hamb {
+      display: block;
+      width: 22px;
+      height: 2px;
+      margin: 4px 0;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 2px;
+    }
+
+    @media (max-width:900px) {
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-links-wrap {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.75rem 1rem 1rem;
+        display: none;
+      }
+
+      .nav-links-wrap.open {
+        display: block;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.2rem;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 0.7rem 0.2rem;
+      }
+
+      .nav-links a::after {
+        display: none;
+      }
+
+      .nav-links a:hover {
+        padding-left: 0.45rem;
+      }
+
+      .nav-links-wrap .mc-profile {
+        margin-top: 0.45rem;
+      }
+
+      .nav-links-wrap .mc-profile-toggle {
+        width: 100%;
+      }
+
+      .nav-links-wrap .mc-profile.open .mc-profile-menu {
+        position: static;
+        margin-top: 0.55rem;
+      }
+    }
+
+    .page-content,
+    main {
+      padding-top: 0 !important;
+    }
+
+    main {
+      padding: 2.25rem 0;
+      min-height: calc(100vh - 92px);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .conditions-section {
+      position: relative;
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      z-index: 40;
+      margin: 1.6rem auto 3rem auto;
+      padding: 2.25rem;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.45);
+      box-shadow: 0 8px 30px rgba(2, 6, 12, 0.6);
+      color: #fff;
+    }
+
+    #poses,
+    .grid {
+      position: static !important;
+      margin-top: 1.5rem !important;
+      z-index: 10 !important;
+    }
+
+    .conditions-section.fixed-panel,
+    .conditions-section[style*="position: fixed"] {
+      position: relative !important;
+      top: auto !important;
+    }
+
+    .conds-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width:980px) {
+      .conds-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .conds-title {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.5rem, 3.8vw, 2.4rem);
+      font-weight: 700;
+      color: #fff;
+      animation: slideInLeft 0.6s ease-out;
+      background: linear-gradient(135deg, #ffffff, #ff77d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: all 0.3s ease;
+    }
+
+    .conds-title:hover {
+      background: linear-gradient(135deg, #ff77d4, #47e7ce);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transform: translateX(5px);
+    }
+
+    .conds-lead {
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 1rem;
+      line-height: 1.6;
+      max-width: 60ch;
+      animation: fadeInUp 0.6s ease-out 0.2s backwards;
+      transition: color 0.3s ease;
+    }
+
+    .conds-lead:hover {
+      color: rgba(255, 255, 255, 0.98);
+    }
+
+    .conds-list {
+      color: rgba(225, 235, 250, 0.85);
+      margin: 0 0 1rem 1rem;
+      animation: fadeInUp 0.6s ease-out 0.3s backwards;
+    }
+
+    .conds-list li {
+      transition: all 0.3s ease;
+      padding: 6px 0;
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .conds-list li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #47e7ce;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .conds-list li:hover {
+      color: rgba(225, 235, 250, 0.98);
+      transform: translateX(4px);
+      text-shadow: 0 0 10px rgba(71, 231, 206, 0.2);
+    }
+
+    .conds-list li:hover:before {
+      transform: scale(1.3) rotate(360deg);
+      color: #ff77d4;
+    }
+
+    .conds-cta-wrap {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.6s ease-out 0.4s backwards;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.6rem 1rem;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--pink), var(--teal));
+      color: #041026;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 8px 20px rgba(71, 231, 206, 0.06);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border: 2px solid transparent;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(71, 231, 206, 0.25);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary:active {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .btn-ghost {
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      text-decoration: none;
+    }
+
+    .conds-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* ===== SMOOTH ANIMATIONS FOR CARDS & ELEMENTS ===== */
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Card entrance animations */
+    .card {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 0.8rem;
+      align-items: center;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(255, 119, 212, 0.2), 0 0 30px rgba(71, 231, 206, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 119, 212, 0.3);
+    }
+
+    .thumb {
+      width: 96px;
+      height: 72px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.35s ease;
+    }
+
+    .card:hover .thumb {
+      box-shadow: 0 8px 20px rgba(255, 119, 212, 0.15);
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card:hover .thumb img {
+      transform: scale(1.08);
+    }
+
+    .card h4 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: #fff;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover h4 {
+      color: #47e7ce;
+    }
+
+    .card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover p {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    /* Yoga Card smooth animations */
+    .yoga-card {
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius: 16px;
+      overflow: visible;
+      animation: fadeInUp 0.7s ease-out forwards;
+      opacity: 0;
+    }
+
+    /* Staggered animation for yoga cards */
+    .poses-grid> :nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .poses-grid> :nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .poses-grid> :nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .poses-grid> :nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .poses-grid> :nth-child(5) {
+      animation-delay: 0.2s;
+    }
+
+    .poses-grid> :nth-child(6) {
+      animation-delay: 0.3s;
+    }
+
+    .poses-grid> :nth-child(7) {
+      animation-delay: 0.4s;
+    }
+
+    .poses-grid> :nth-child(8) {
+      animation-delay: 0.5s;
+    }
+
+    .yoga-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 24px 60px rgba(255, 119, 212, 0.25), 0 0 40px rgba(71, 231, 206, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 119, 212, 0.4);
+    }
+
+    .yoga-card:focus {
+      outline: 3px solid rgba(124, 58, 237, 0.3);
+      outline-offset: 4px;
+      transform: translateY(-8px);
+    }
+
+    .img-wrap {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 119, 212, 0.1), rgba(71, 231, 206, 0.05));
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .yoga-card:hover .img-wrap img {
+      transform: scale(1.12) rotate(1deg);
+    }
+
+    /* Pose card smooth animations */
+    .pose-card {
+      padding: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: scaleIn 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .pose-card:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 20px 50px rgba(255, 119, 212, 0.2);
+    }
+
+    .pose-card .pose-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pose-card:hover .pose-img {
+      transform: scale(1.1) rotate(1deg);
+    }
+
+    .pose-card .pose-body {
+      padding: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .pose-card:hover .pose-body {
+      background: rgba(255, 119, 212, 0.05);
+    }
+
+    .pose-card h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #f8fafc;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .pose-card:hover h4 {
+      color: #47e7ce;
+    }
+
+    .pose-card p {
+      margin: 8px 0 0 0;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .pose-card:hover p {
+      color: #cbd5e1;
+    }
+
+    footer {
+      padding: 2rem 0;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+
+    @media (max-width:520px) {
+      .nav-container {
+        padding: 0.6rem 0.9rem;
+      }
+
+      .card {
+        grid-template-columns: 84px 1fr;
+      }
+
+      .thumb {
+        width: 84px;
+        height: 64px;
+      }
+    }
+
+    @media (max-width:720px) {
+      .animated-wrap .blob {
+        display: none;
+      }
+
+      #bg-canvas {
+        display: none;
+      }
+
+      .animated-wrap {
+        animation: none;
+        background: linear-gradient(120deg, #060416 0%, #071228 100%);
+        opacity: 0.9;
+      }
+    }
+
+    /* Background + gradient headline + card styles (preserved) */
+    body {
+      background: radial-gradient(900px 500px at 10% 15%, rgba(236, 72, 153, 0.08), transparent 10%),
+        radial-gradient(700px 400px at 90% 80%, rgba(6, 182, 212, 0.06), transparent 8%),
+        linear-gradient(180deg, #fff8ff 0%, #f7fbff 100%);
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    .gradient-head {
+      background: linear-gradient(90deg, #ec4899, #06b6d4, #7c3aed);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    /* Card glass effect - unified dark theme */
+    .yoga-card {
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius: 16px;
+      overflow: visible;
+      animation: fadeInUp 0.7s ease-out forwards;
+      opacity: 0;
+    }
+
+    /* Staggered animation for yoga cards */
+    .poses-grid> :nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .poses-grid> :nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .poses-grid> :nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .poses-grid> :nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .poses-grid> :nth-child(5) {
+      animation-delay: 0.2s;
+    }
+
+    .poses-grid> :nth-child(6) {
+      animation-delay: 0.3s;
+    }
+
+    .poses-grid> :nth-child(7) {
+      animation-delay: 0.4s;
+    }
+
+    .poses-grid> :nth-child(8) {
+      animation-delay: 0.5s;
+    }
+
+    .yoga-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 24px 60px rgba(255, 119, 212, 0.25), 0 0 40px rgba(71, 231, 206, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 119, 212, 0.4);
+    }
+
+    .yoga-card:focus {
+      outline: 3px solid rgba(124, 58, 237, 0.3);
+      outline-offset: 4px;
+      transform: translateY(-8px);
+    }
+
+    .img-wrap {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 119, 212, 0.1), rgba(71, 231, 206, 0.05));
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .yoga-card:hover .img-wrap img {
+      transform: scale(1.12) rotate(1deg);
+    }
+
+    .img-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .sparkle-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .12s linear;
+    }
+
+    .sparkle-overlay.active {
+      opacity: 1;
+      animation: glowPulse 700ms ease-out;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        filter: blur(0px) opacity(.0);
+        transform: scale(0.98);
+      }
+
+      40% {
+        filter: blur(8px) opacity(.95);
+        transform: scale(1.02);
+      }
+
+      100% {
+        filter: blur(10px) opacity(.0);
+        transform: scale(1.04);
+      }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 40% 30%, #fff, rgba(255, 255, 255, 0.8));
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+      transform: translate3d(0, 0, 0);
+      opacity: 0;
+      animation: pop 900ms ease-out forwards;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: translateY(6px) scale(.6);
+        opacity: 0;
+      }
+
+      40% {
+        transform: translateY(-8px) scale(1.1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-20px) scale(.9);
+        opacity: 0;
+      }
+    }
+
+    /* modal styles for pose details (kept) */
+    /* ===== SMOOTH MODAL ANIMATIONS ===== */
+
+    @keyframes backdropFadeIn {
+      from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+      }
+
+      to {
+        opacity: 1;
+        backdrop-filter: blur(4px);
+      }
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.85) translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes modalImageFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes modalInfoFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes modalCloseIn {
+      from {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    .pose-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(3, 4, 10, 0.6);
+      z-index: 2000;
+      padding: 1.25rem;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease-out;
+    }
+
+    .pose-modal-backdrop.open {
+      display: flex;
+      animation: backdropFadeIn 0.4s ease-out;
+    }
+
+    .pose-modal {
+      width: min(920px, 96%);
+      max-height: 92vh;
+      overflow: auto;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfbff 100%);
+      box-shadow: 0 30px 80px rgba(2, 6, 23, 0.4), 0 0 60px rgba(255, 119, 212, 0.1);
+      color: #0b1220;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all 0.4s ease-out;
+    }
+
+    .pose-modal-backdrop:not(.open) .pose-modal {
+      animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) reverse;
+    }
+
+    @media (max-width:900px) {
+      .pose-modal {
+        grid-template-columns: 1fr;
+        padding: 1.25rem;
+        gap: 1rem;
+      }
+    }
+
+    .pose-modal .pm-img {
+      width: 100%;
+      height: 350px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #eaeef8, #f0f4ff);
+      animation: modalImageFadeIn 0.6s ease-out 0.15s backwards;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .pose-modal .pm-img:hover {
+      box-shadow: 0 15px 40px rgba(255, 119, 212, 0.15);
+    }
+
+    .pose-modal .pm-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pose-modal:hover .pm-img img {
+      transform: scale(1.05) rotate(1deg);
+    }
+
+    .pose-modal .pm-info {
+      padding: 0.5rem 0;
+      animation: modalInfoFadeIn 0.6s ease-out 0.25s backwards;
+    }
+
+    .pose-modal .pm-info h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1.4rem;
+      color: #0b1220;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff77d4, #47e7ce);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: all 0.3s ease;
+    }
+
+    .pose-modal .pm-info h3:hover {
+      transform: translateX(5px);
+    }
+
+    .pose-modal .pm-info .pm-sub {
+      margin: 0 0 1rem;
+      color: #6366f1;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      transition: all 0.3s ease;
+    }
+
+    .pose-modal .pm-info .pm-sub:hover {
+      color: #4f46e5;
+    }
+
+    .pose-modal .pm-info p {
+      color: #334155;
+      line-height: 1.7;
+      margin: 0 0 0.8rem;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .pose-modal .pm-info p:hover {
+      color: #0b1220;
+      transform: translateX(3px);
+    }
+
+    .pose-modal .pm-close-dark {
+      position: absolute;
+      right: 1.5rem;
+      top: 1.5rem;
+      background: rgba(255, 119, 212, 0.1);
+      border: 2px solid rgba(255, 119, 212, 0.2);
+      font-size: 1.5rem;
+      color: #0b1220;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: modalCloseIn 0.5s ease-out 0.35s backwards;
+    }
+
+    .pose-modal .pm-close-dark:hover {
+      background: rgba(255, 119, 212, 0.25);
+      border-color: rgba(255, 119, 212, 0.5);
+      transform: scale(1.15) rotate(90deg);
+      box-shadow: 0 8px 20px rgba(255, 119, 212, 0.2);
+    }
+
+    .pose-modal .pm-close-dark:active {
+      transform: scale(0.95) rotate(90deg);
+    }
+
+    /* Pose grid (new addition: responsive cards) */
+    #poses-section {
+      max-width: 1200px;
+      margin: 0 auto 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .poses-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 20px;
+    }
+
+    @media (min-width:640px) {
+      .poses-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width:980px) {
+      .poses-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width:1200px) {
+      .poses-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .pose-card {
+      /* make card smaller and contained; using your yoga-card style (keeps existing effects) */
+      padding: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      animation: scaleIn 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .pose-card:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 20px 50px rgba(255, 119, 212, 0.2);
+    }
+
+    .pose-card .pose-img {
+      width: 100%;
+      height: 200px;
+      /* smaller image height for cards */
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pose-card:hover .pose-img {
+      transform: scale(1.1) rotate(1deg);
+    }
+
+    .pose-card .pose-body {
+      padding: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .pose-card:hover .pose-body {
+      background: rgba(255, 119, 212, 0.05);
+    }
+
+    .pose-card h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #f8fafc;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .pose-card:hover h4 {
+      color: #47e7ce;
+    }
+
+    .pose-card p {
+      margin: 8px 0 0 0;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    .pose-card:hover p {
+      color: #cbd5e1;
+    }
+
+    @media (max-width:1024px) {
+
+      .container,
+      #poses-section {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .conditions-section {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width:768px) {
+      .nav-inner {
+        height: auto;
+        min-height: 60px;
+        padding: 0.55rem 1rem;
+      }
+
+      .brand-text {
+        font-size: 0.95rem;
+      }
+
+      .nav-links-wrap {
+        right: 1rem;
+      }
+
+      .conditions-section {
+        margin: 1rem auto 2rem auto;
+        padding: 1.2rem;
+      }
+
+      .card {
+        grid-template-columns: 72px 1fr;
+        gap: 0.8rem;
+      }
+
+      .thumb,
+      .thumb img {
+        width: 72px;
+        height: 56px;
+      }
+
+      .conds-title {
+        font-size: 1.35rem;
+      }
+
+      #poses-section .container>div {
+        display: block !important;
+      }
+
+      #poses-section .container>div>div {
+        margin-top: 0.5rem;
+        color: rgba(248, 250, 252, 0.76) !important;
+      }
+
+      .pose-modal {
+        width: min(92vw, 920px);
+        max-height: 86vh;
+        padding: 1rem;
+      }
+
+      .pose-modal .pm-img {
+        height: 230px;
+      }
+
+      .pose-modal .pm-close-dark {
+        right: 0.8rem;
+        top: 0.8rem;
+      }
+    }
+
+    @media (max-width:480px) {
+      .nav-inner {
+        padding: 0.55rem 0.75rem;
+      }
+
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+      }
+
+      .brand-text {
+        font-size: 0.88rem;
+      }
+
+      .conditions-section {
+        padding: 1rem;
+      }
+
+      .card {
+        grid-template-columns: 1fr;
+      }
+
+      .thumb,
+      .thumb img {
+        width: 100%;
+        height: 150px;
+        border-radius: 10px;
+      }
+
+      .img-wrap,
+      .pose-card .pose-img {
+        height: 170px;
+      }
+
+      .pose-modal .pm-img {
+        height: 190px;
+      }
+
+      .pose-modal .pm-info h3 {
+        font-size: 1.15rem;
+      }
+
+      .pose-modal .pm-info p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/cursor.css" />
+  <link rel="stylesheet" href="assets/css/shared-footer.css" />
+  <link rel="stylesheet" href="assets/css/shared-profile.css" />
+</head>
+
+<body>
+  <!-- ========== ANIMATED BACKGROUND (blobs + canvas) ========== -->
+  <div class="animated-wrap" aria-hidden="true">
+    <div class="bg-blobs" aria-hidden="true">
+      <div class="blob p1"></div>
+      <div class="blob p2"></div>
+      <div class="blob p3"></div>
+    </div>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
+  </div>
+
+  <!-- ========== VISIBLE PAGE CONTENT ========== -->
+  <div class="page-content">
+    <!-- NAVBAR -->
+    <nav class="mc-nav" aria-label="Main navigation">
+      <div class="nav-inner">
+        <div class="brand">
+          <img src="assets/images/Mindcare logo.jpg" alt="MindCare AI Logo" class="brand-logo" onerror="this.style.display='none'">
+          <span class="brand-text">MindCare AI</span>
+        </div>
+
+        <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">
+          <span class="hamb"></span>
+          <span class="hamb"></span>
+          <span class="hamb"></span>
+        </button>
+
+        <div class="nav-links-wrap" id="navWrap">
+          <div class="nav-links">
+            <a href="Him2.html">Home</a>
+            <a href="jarvis-mate.html">Talk to AI</a>
+            <a href="/blog/Blog2.html">Blog</a>
+            <a href="nutrimate-ai.html">Nutritionist</a>
+          </div>
+          <div data-profile-root class="mc-profile">
+            <button type="button" data-profile-toggle class="mc-profile-toggle" aria-haspopup="true"
+              aria-expanded="false">
+              User Profile
+            </button>
+            <div data-profile-menu class="mc-profile-menu">
+              <a href="#" data-profile-settings>Settings</a>
+              <button type="button" class="mc-profile-logout" data-profile-logout>Logout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main>
+      <!-- Healing Power of Yoga (kept full width look as requested) -->
+      <section class="conditions-section container" aria-labelledby="healing-title">
+        <div class="conds-grid">
+          <!-- LEFT -->
+          <div>
+            <h2 id="healing-title" class="conds-title">The Healing Power of Yoga</h2>
+            <p class="conds-lead">
+              Yoga offers gentle, science-backed practices that can help reduce anxiety and depressive symptoms,
+              calm the nervous system, and restore balance. Explore guided practices for targeted relief.
+            </p>
+            <ul class="conds-list">
+              <li>Mindful breathing and relaxation</li>
+              <li>Gentle flows to release tension</li>
+              <li>Short practices for difficult moments</li>
+            </ul>
+
+            <div class="conds-cta-wrap">
+              <a class="btn-primary" href="#poses-section">Explore Poses</a>
+            </div>
+          </div>
+
+          <!-- RIGHT (small cards summary) -->
+          <div class="conds-right" aria-hidden="true">
+            <article class="card" aria-labelledby="a-title">
+              <div class="thumb" aria-hidden="true">
+                <!-- Replace below src with your real Anxiety image filename -->
+                <img src="assets/images/Anxiety.jpg" alt="Anxiety practice">
+              </div>
+              <div>
+                <h4 id="a-title">Anxiety</h4>
+                <p>Anxiety is a situation in which we feel nervous about the future.
+                  It can a lot of overthinking due to which mind gets blanked.
+                  To feel relax 2-5 minutes deep breathing is very effective.
+                </p>
+              </div>
+            </article>
+
+            <article class="card" aria-labelledby="b-title">
+              <div class="thumb" aria-hidden="true">
+                <img src="assets/images/Depression.jpg" alt="Relaxing posture">
+              </div>
+              <div>
+                <h4 id="b-title">Depression</h4>
+                <p>Depression is a situation which affects the daily activities of a person.
+                  Depression can be cured easily with good routine and positive mindset.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Poses Section - cards grid -->
+      <section id="poses-section" aria-labelledby="poses-title">
+        <div class="container">
+          <div style="display:flex; justify-content:space-between; align-items:end; margin-bottom:12px;">
+            <h3 id="poses-title" class="gradient-head" style="font-size:1.5rem; margin:0;">Explore Yoga Poses</h3>
+            <div style="color: #000; font-size:0.95rem;">Click a card to view details</div>
+          </div>
+
+          <div class="poses-grid">
+            <!-- Pose 1 -->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="seated-forward">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Seated forward bend.jpg" alt="Seated Forward Bend (Paschimottanasana)">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title">Seated Forward Bend</h4>
+                <p class="pose-sub">Stretches the spine and hamstrings, calms the mind.</p>
+              </div>
+            </div>
+
+            <!-- Pose 2 -->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="catcow">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Catcow2.jpg" alt="Cat Cow Pose">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title">Cat Cow Pose</h4>
+                <p class="pose-sub">Helps to alleviate anxiety and stress..</p>
+              </div>
+            </div>
+
+            <!-- Pose 3 -->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="uttasana">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Standing Forward Bend.jpg" alt="Uttasana — Standing Forward Bend">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title">Uttasana (Forward Bend)</h4>
+                <p class="pose-sub">Releases lower back and neck tension.</p>
+              </div>
+            </div>
+
+            <!-- Pose 4 -->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="fish">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Fishpose.jpg" alt="Fish Pose(Matsyasana)">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title">Fish Pose (Matsyasana)</h4>
+                <p class="pose-sub">A pose to encourage deep breathing and to reduce tension.</p>
+              </div>
+            </div>
+
+            <!-- Pose 5 -->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="triangle">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Trianglepose.jpg" alt="Triangle Pose(Trikonasana)">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title">Triangle pose</h4>
+                <p class="pose-sub">Stretches the spine and promotes a sense of equilibrium.</p>
+              </div>
+            </div>
+
+            <!-- Pose 6 -->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="bridge">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Bridgepose.jpg" alt="Bridge Pose (Setu Bandha)">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title">Bridge Pose</h4>
+                <p class="pose-sub">Strengthens the back and opens the chest.</p>
+              </div>
+            </div>
+            <!--Pose 7 -->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="lotus">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Lotuspose.jpg" alt="Lotus Pose (Padamasana)">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title">Lotus Pose</h4>
+                <p class="pose-sub">This pose cultivates concentration,mindfulness and inner calm
+                  making it an excellent pose for maintaining anxiety.
+                </p>
+              </div>
+            </div>
+            <!--Pose 8-->
+            <div class="yoga-card pose-card" tabindex="0" data-pose="baby">
+              <div class="img-wrap">
+                <img class="pose-img" src="assets/images/Happybabypose.jpg" alt="Happy Baby Pose(Ananda Balasana)">
+              </div>
+              <div class="pose-body">
+                <h4 class="pose-title"> Happy Baby Pose</h4>
+                <p class="pose-sub">This pose offers a delightful stretch to the hips and
+                  lower back evoking a sense of joy and relaxation.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Modal for pose details (opens when a card clicked) -->
+      <div id="poseModalBackdrop" class="pose-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="pose-modal" role="document" aria-labelledby="modalTitle">
+          <div class="pm-img">
+            <img id="modalImg" src="" alt="">
+          </div>
+          <div class="pm-info">
+            <button id="modalClose" class="pm-close-dark" aria-label="Close modal">&times;</button>
+            <h3 id="modalTitle">Pose Title</h3>
+            <div class="pm-sub" id="modalSubtitle">Subtitle</div>
+            <p id="modalDesc">Description and benefits of the pose will appear here.</p>
+            <p style="margin-top:8px; color:#555;">Tip: Breathe slowly and gently while holding the posture.</p>
+          </div>
+        </div>
+      </div>
+
+      <div data-shared-footer></div>
+    </main>
+  </div>
+
+  <script>
+    // nav toggle for mobile
+    const toggle = document.querySelector('.nav-toggle');
+    const navWrap = document.getElementById('navWrap');
+    toggle && toggle.addEventListener('click', () => {
+      const open = navWrap.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // Pose modal logic (keeps interactions simple)
+    const poseCards = document.querySelectorAll('.pose-card');
+    const backdrop = document.getElementById('poseModalBackdrop');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSubtitle = document.getElementById('modalSubtitle');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalClose = document.getElementById('modalClose');
+
+    // Data for poses (you can extend or replace text/images as needed)
+    const poseData = {
+      "seated-forward": {
+        title: "Seated Forward Bend (Paschimottanasana)",
+        subtitle: "Calms the mind · Stretches hamstrings",
+        img: "assets/images/Seated forward bend.jpg",
+        desc: "Sit with legs extended. Inhale to lengthen the spine and exhale to fold forward. Hold 30s–1min. Helps calm anxiety and release the back of the body."
+      },
+      "catcow": {
+        title: "Cat Cow Pose ()",
+        subtitle: "Grounding · Balance",
+        img: "assets/images/Catcowpose.jpg",
+        desc: "Drop your belly, lift your chest and tailbone and gaze slightly up. Increases spinal flexibility."
+      },
+      "uttasana": {
+        title: "Uttanasana (Standing Forward Bend)",
+        subtitle: "Release tension in back & neck",
+        img: "assets/images/Standing Forward Bend.jpg",
+        desc: "From standing, hinge at hips and fold forward gently. Bend knees if necessary. Hold and breathe for 30s–1min."
+      },
+      "fish": {
+        title: "Fish Pose",
+        subtitle: "Encourages deep breathing.",
+        img: "assets/images/Fishpose.jpg",
+        desc: "Lie on your back,slide ypur hands under your hips and lift your chest upward while arching your bodyand rest the crown of your head on mat."
+      },
+      "triangle": {
+        title: "Triangle Pose (Trikonasana)",
+        subtitle: "Stretches spine · Sense of equilibrium",
+        img: "assets/images/Trianglepose.jpg",
+        desc: "Stand with your leg wide apart,stretch your arms out shoulder height and bend sideways to touch your right hand to your right foot while keeping your left arm extended upwards."
+      },
+      "bridge": {
+        title: "Bridge Pose (Setu Bandha Sarvangasana)",
+        subtitle: "Chest opener · Strengthens back",
+        img: "assets/images/Bridgepose.jpg",
+        desc: "Lie supine, bend knees, feet hip-width. Press hips up keeping knees aligned over ankles. Hold and breathe for 20–40s."
+      },
+      "lotus": {
+        title: "Lotus Pose(Padmasana)",
+        subtitle: "Inner calm and mindfulness",
+        img: "assets/images/Lotuspose.jpg",
+        desc: "Sit on floor with your back straight and close your eyes and slowly inhale and exhale for 2-3 minutes."
+      },
+      "baby": {
+        title: "Happy Baby Pose(Ananda Balasana)",
+        subtitle: "Evokes a sense of joy and relaxation",
+        img: "assets/images/Happybabypose.jpg",
+        desc: "Lie on your back, bend your knees toward your chest and hold the outer edges of your feet with your hands."
+      },
+    };
+
+    function openModalFor(poseKey) {
+      const data = poseData[poseKey];
+      if (!data) return;
+      modalImg.src = data.img;
+      modalImg.alt = data.title;
+      modalTitle.textContent = data.title;
+      modalSubtitle.textContent = data.subtitle;
+      modalDesc.textContent = data.desc;
+      backdrop.classList.add('open');
+      backdrop.setAttribute('aria-hidden', 'false');
+    }
+
+    poseCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const key = card.getAttribute('data-pose');
+        openModalFor(key);
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const key = card.getAttribute('data-pose');
+          openModalFor(key);
+        }
+      });
+    });
+
+    modalClose && modalClose.addEventListener('click', () => {
+      closeModalWithAnimation();
+    });
+    // close when clicking backdrop outside modal
+    backdrop && backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) {
+        closeModalWithAnimation();
+      }
+    });
+    // close on Escape
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModalWithAnimation();
+      }
+    });
+
+    // Smooth close animation function
+    function closeModalWithAnimation() {
+      if (backdrop) {
+        // Remove the open class to trigger reverse animation
+        backdrop.classList.remove('open');
+        backdrop.setAttribute('aria-hidden', 'true');
+      }
+    }
+  </script>
+  <script src="assets/js/shared-profile.js"></script>
+  <script src="assets/js/shared-footer.js"></script>
+  <script src="assets/js/cursor.js"></script>
+</body>
+
+</html>

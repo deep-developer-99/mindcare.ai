@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - MindCare AI</title>
+  <script>
+    (function () {
+      const LOGIN_PAGE_URL = '/auth/login-page/index.html';
+      const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+      window.__dashboardUser = null;
+      document.documentElement.style.visibility = 'hidden';
+
+      fetch(`${API_BASE}/api/auth/verify`, {
+        method: 'GET',
+        credentials: 'include',
+        cache: 'no-store'
+      })
+        .then(async (response) => {
+          if (!response.ok) throw new Error('Unauthorized');
+          const payload = await response.json();
+          window.__dashboardUser = payload.user || null;
+          document.documentElement.style.visibility = 'visible';
+        })
+        .catch(() => {
+          window.location.replace(LOGIN_PAGE_URL);
+        });
+    })();
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(900px 500px at 10% 10%, rgba(244, 63, 94, 0.12), transparent 40%),
+                  radial-gradient(800px 450px at 90% 85%, rgba(56, 189, 248, 0.15), transparent 38%),
+                  linear-gradient(135deg, #080b14 0%, #111827 100%);
+      color: #e2e8f0;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.76);
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(15, 23, 42, 0.8);
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      border-color: rgba(244, 63, 94, 0.7);
+      color: #fff;
+    }
+
+    .btn.btn-primary {
+      border-color: rgba(56, 189, 248, 0.65);
+      background: rgba(14, 116, 144, 0.45);
+      color: #e0f2fe;
+    }
+
+    .btn.btn-primary:hover {
+      border-color: rgba(56, 189, 248, 0.95);
+      background: rgba(14, 116, 144, 0.62);
+    }
+
+    .btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 22px 18px 28px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+    }
+
+    .sidebar {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(2, 6, 23, 0.72);
+      border-radius: 14px;
+      padding: 12px;
+      height: fit-content;
+      position: sticky;
+      top: 84px;
+    }
+
+    .sidebar h2 {
+      margin: 6px 8px 12px;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .side-link {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #cbd5e1;
+      text-align: left;
+      border-radius: 10px;
+      padding: 11px 12px;
+      margin: 2px 0;
+      font-size: 0.94rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .side-link:hover {
+      background: rgba(30, 41, 59, 0.75);
+      color: #fff;
+    }
+
+    .side-link.active {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.24), rgba(59, 130, 246, 0.24));
+      color: #fff;
+      border: 1px solid rgba(244, 63, 94, 0.45);
+    }
+
+    .content {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(2, 6, 23, 0.68);
+      border-radius: 14px;
+      padding: 20px;
+      min-height: 500px;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .panel h3 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+
+    .panel p {
+      margin: 0 0 18px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .card {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.75);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .account-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .account-status {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .account-status.success {
+      color: #86efac;
+    }
+
+    .account-status.error {
+      color: #fca5a5;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(15, 23, 42, 0.9);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.92rem;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.85);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+
+    .delete-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .confirm-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fecaca;
+      font-size: 0.92rem;
+    }
+
+    .confirm-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #ef4444;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .switch {
+      width: 42px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(71, 85, 105, 0.9);
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      background: #e2e8f0;
+    }
+
+    .switch.on {
+      background: rgba(34, 197, 94, 0.65);
+    }
+
+    .switch.on::after {
+      left: 20px;
+      background: #fff;
+    }
+
+    .danger {
+      border: 1px solid rgba(248, 113, 113, 0.35);
+      background: rgba(127, 29, 29, 0.26);
+    }
+
+    .danger h4 {
+      margin: 0 0 8px;
+      color: #fecaca;
+    }
+
+    .danger button {
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      background: rgba(220, 38, 38, 0.24);
+      color: #fecaca;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+    }
+
+    .danger button:hover {
+      background: rgba(220, 38, 38, 0.34);
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+      }
+
+      .field-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/cursor.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="Him2.html">
+        <img src="assets/images/Mindcare logo.jpg" alt="MindCare AI" />
+        <span>MindCare AI - User Dashboard</span>
+      </a>
+      <div class="top-actions">
+        <a class="btn" href="Him2.html">Back to Home</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h2>Settings Menu</h2>
+      <button class="side-link active" data-tab="account">1. Account</button>
+      <button class="side-link" data-tab="personal-information">2. Personal Information</button>
+      <button class="side-link" data-tab="notification">3. Notification</button>
+      <button class="side-link" data-tab="security">4. Security</button>
+      <button class="side-link" data-tab="delete-account">5. Delete Account</button>
+    </aside>
+
+    <main class="content">
+      <section class="panel active" data-panel="account">
+        <h3>Account</h3>
+        <div class="card">
+          <div class="account-actions">
+            <button class="btn" type="button" id="account-edit-btn">Edit</button>
+            <button class="btn btn-primary" type="button" id="account-save-btn" hidden>Save</button>
+            <button class="btn" type="button" id="account-cancel-btn" hidden>Cancel</button>
+            <span id="account-status" class="account-status" aria-live="polite"></span>
+          </div>
+          <div class="field-grid">
+            <div>
+              <label for="account-firstName">First Name</label>
+              <input id="account-firstName" type="text" />
+            </div>
+            <div>
+              <label for="account-lastName">Last Name</label>
+              <input id="account-lastName" type="text" />
+            </div>
+            <div>
+              <label for="account-dob">Date of Birth</label>
+              <input id="account-dob" type="date" />
+            </div>
+            <div>
+              <label for="account-gender">Gender</label>
+              <select id="account-gender">
+                <option value="">Select...</option>
+                <option>Female</option>
+                <option>Male</option>
+                <option>Non-binary</option>
+                <option>Prefer not to say</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="account-mobile">Mobile Number</label>
+              <input id="account-mobile" type="text" />
+            </div>
+            <div>
+              <label for="account-email">Email</label>
+              <input id="account-email" type="email" />
+            </div>
+            <div>
+              <label for="account-city">City</label>
+              <input id="account-city" type="text" />
+            </div>
+            <div>
+              <label for="account-occupation">Occupation</label>
+              <input id="account-occupation" type="text" />
+            </div>
+            <div>
+              <label for="account-relationship">Relationship Status</label>
+              <select id="account-relationship">
+                <option value="">Select...</option>
+                <option>Single</option>
+                <option>In One-Sided Love</option>
+                <option>In a relationship</option>
+                <option>Married</option>
+                <option>Separated</option>
+                <option>Prefer not to say</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="personal-information">
+        <h3>Personal Information</h3>
+        <p>Primary editable profile details are managed in the Account section.</p>
+        <div class="card">
+          <p>You can view and update your profile from the Account tab.</p>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="notification">
+        <h3>Notification</h3>
+        <p>Choose which types of notifications you want to receive.</p>
+        <div class="card">
+          <div class="row"><span>Email Alerts</span><span class="switch on" aria-hidden="true"></span></div>
+          <div class="row"><span>Weekly Wellness Tips</span><span class="switch on" aria-hidden="true"></span></div>
+          <div class="row"><span>Security Notifications</span><span class="switch on" aria-hidden="true"></span></div>
+          <div class="row"><span>Promotional Updates</span><span class="switch" aria-hidden="true"></span></div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="security">
+        <h3>Security</h3>
+        <p>Manage your password and account security preferences here.</p>
+        <div class="card">
+          <div class="field-grid">
+            <div>
+              <label for="current-password">Current Password</label>
+              <input id="current-password" type="password" placeholder="Current password" />
+            </div>
+            <div>
+              <label for="new-password">New Password</label>
+              <input id="new-password" type="password" placeholder="New password" />
+            </div>
+            <div>
+              <label for="confirm-password">Confirm New Password</label>
+              <input id="confirm-password" type="password" placeholder="Confirm new password" />
+            </div>
+          </div>
+          <div class="account-actions" style="margin-top: 14px;">
+            <button class="btn btn-primary" type="button" id="change-password-btn">Change</button>
+            <button class="btn" type="button" id="cancel-password-btn">Cancel</button>
+            <span id="security-status" class="account-status" aria-live="polite"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="delete-account">
+        <h3>Delete Account</h3>
+        <p>Permanent account deletion cannot be undone and your data cannot be restored.</p>
+        <div class="card danger">
+          <h4>Danger Zone</h4>
+          <p>Please tell us why you want to delete your account and confirm before continuing.</p>
+          <div class="delete-form">
+            <div>
+              <label for="delete-reason">Why do you want to delete your account?</label>
+              <textarea id="delete-reason" rows="4" placeholder="Write your reason here..."></textarea>
+            </div>
+            <label class="confirm-row" for="delete-confirm">
+              <input type="checkbox" id="delete-confirm" />
+              <span>I am sure I want to delete my account.</span>
+            </label>
+          </div>
+          <div class="account-actions" style="margin-top: 12px;">
+            <button type="button" id="delete-account-btn">Delete Account</button>
+            <button type="button" id="delete-cancel-btn" class="btn">Cancel</button>
+            <span id="delete-status" class="account-status" aria-live="polite"></span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+      const PROFILE_ENDPOINT = `${API_BASE}/api/auth/me`;
+      const PASSWORD_ENDPOINT = `${API_BASE}/api/auth/password`;
+      const HOME_PAGE_URL = window.location.protocol === 'file:' ? 'Him2.html' : '/Him2.html';
+      const LOGIN_PAGE_URL = '/auth/login-page/index.html';
+      const tabs = document.querySelectorAll('[data-tab]');
+      const panels = document.querySelectorAll('[data-panel]');
+      const deleteBtn = document.getElementById('delete-account-btn');
+      const deleteCancelBtn = document.getElementById('delete-cancel-btn');
+      const deleteReasonInput = document.getElementById('delete-reason');
+      const deleteConfirmInput = document.getElementById('delete-confirm');
+      const deleteStatusEl = document.getElementById('delete-status');
+      const currentPasswordInput = document.getElementById('current-password');
+      const newPasswordInput = document.getElementById('new-password');
+      const confirmPasswordInput = document.getElementById('confirm-password');
+      const changePasswordBtn = document.getElementById('change-password-btn');
+      const cancelPasswordBtn = document.getElementById('cancel-password-btn');
+      const securityStatusEl = document.getElementById('security-status');
+      const editBtn = document.getElementById('account-edit-btn');
+      const saveBtn = document.getElementById('account-save-btn');
+      const cancelBtn = document.getElementById('account-cancel-btn');
+      const statusEl = document.getElementById('account-status');
+      const accountFieldIds = [
+        'account-firstName',
+        'account-lastName',
+        'account-dob',
+        'account-gender',
+        'account-mobile',
+        'account-email',
+        'account-city',
+        'account-occupation',
+        'account-relationship'
+      ];
+      const accountFieldMap = {
+        firstName: 'account-firstName',
+        lastName: 'account-lastName',
+        dob: 'account-dob',
+        gender: 'account-gender',
+        mobile: 'account-mobile',
+        email: 'account-email',
+        city: 'account-city',
+        occupation: 'account-occupation',
+        relationship: 'account-relationship'
+      };
+      let profileSnapshot = null;
+
+      tabs.forEach((tabBtn) => {
+        tabBtn.addEventListener('click', () => {
+          const tab = tabBtn.getAttribute('data-tab');
+          tabs.forEach((btn) => btn.classList.remove('active'));
+          tabBtn.classList.add('active');
+          panels.forEach((panel) => {
+            panel.classList.toggle('active', panel.getAttribute('data-panel') === tab);
+          });
+        });
+      });
+
+      function setAccountMode(editing) {
+        accountFieldIds.forEach((id) => {
+          const field = document.getElementById(id);
+          if (field) field.disabled = !editing;
+        });
+        if (editBtn) editBtn.hidden = editing;
+        if (saveBtn) saveBtn.hidden = !editing;
+        if (cancelBtn) cancelBtn.hidden = !editing;
+      }
+
+      function showAccountStatus(message, type = '') {
+        if (!statusEl) return;
+        statusEl.textContent = message || '';
+        statusEl.classList.remove('success', 'error');
+        if (type) statusEl.classList.add(type);
+      }
+
+      function showSecurityStatus(message, type = '') {
+        if (!securityStatusEl) return;
+        securityStatusEl.textContent = message || '';
+        securityStatusEl.classList.remove('success', 'error');
+        if (type) securityStatusEl.classList.add(type);
+      }
+
+      function showDeleteStatus(message, type = '') {
+        if (!deleteStatusEl) return;
+        deleteStatusEl.textContent = message || '';
+        deleteStatusEl.classList.remove('success', 'error');
+        if (type) deleteStatusEl.classList.add(type);
+      }
+
+      function clearDeleteForm() {
+        if (deleteReasonInput) deleteReasonInput.value = '';
+        if (deleteConfirmInput) deleteConfirmInput.checked = false;
+      }
+
+      async function parseApiResponse(response) {
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          return response.json();
+        }
+
+        const text = await response.text();
+        if (text.trim().startsWith('<!DOCTYPE')) {
+          return { message: 'Unexpected HTML response from server. Please restart backend server.' };
+        }
+        return { message: text || 'Unexpected server response' };
+      }
+
+      function clearSecurityFields() {
+        if (currentPasswordInput) currentPasswordInput.value = '';
+        if (newPasswordInput) newPasswordInput.value = '';
+        if (confirmPasswordInput) confirmPasswordInput.value = '';
+      }
+
+      function collectAccountValues() {
+        const payload = {};
+        Object.keys(accountFieldMap).forEach((key) => {
+          const field = document.getElementById(accountFieldMap[key]);
+          payload[key] = field ? field.value.trim() : '';
+        });
+        return payload;
+      }
+
+      function fillAccountForm(user) {
+        if (!user) return;
+        Object.keys(accountFieldMap).forEach((key) => {
+          const field = document.getElementById(accountFieldMap[key]);
+          if (field) field.value = user[key] || '';
+        });
+        profileSnapshot = collectAccountValues();
+      }
+
+      function restoreSnapshot() {
+        if (!profileSnapshot) return;
+        fillAccountForm(profileSnapshot);
+      }
+
+      async function loadProfile() {
+        const response = await fetch(PROFILE_ENDPOINT, {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-store'
+        });
+
+        if (!response.ok) {
+          throw new Error('Unauthorized');
+        }
+
+        const payload = await response.json();
+        fillAccountForm(payload.user);
+      }
+
+      function validateAccountPayload(payload) {
+        const required = ['firstName', 'lastName', 'dob', 'gender', 'mobile', 'email', 'city', 'occupation', 'relationship'];
+        return required.every((field) => payload[field]);
+      }
+
+      setAccountMode(false);
+
+      loadProfile().catch(() => {
+        window.location.replace(LOGIN_PAGE_URL);
+      });
+
+      if (editBtn) {
+        editBtn.addEventListener('click', () => {
+          showAccountStatus('');
+          setAccountMode(true);
+        });
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          restoreSnapshot();
+          showAccountStatus('Changes cancelled.');
+          setAccountMode(false);
+        });
+      }
+
+      if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+          const payload = collectAccountValues();
+
+          if (!validateAccountPayload(payload)) {
+            showAccountStatus('Please fill all account fields before saving.', 'error');
+            return;
+          }
+
+          saveBtn.disabled = true;
+          showAccountStatus('Saving changes...');
+
+          try {
+            const response = await fetch(PROFILE_ENDPOINT, {
+              method: 'PUT',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            const result = await parseApiResponse(response);
+            if (!response.ok) {
+              throw new Error(result.message || 'Update failed');
+            }
+
+            fillAccountForm(result.user);
+            showAccountStatus('Profile updated successfully.', 'success');
+            setAccountMode(false);
+          } catch (error) {
+            showAccountStatus(error.message || 'Could not update profile.', 'error');
+          } finally {
+            saveBtn.disabled = false;
+          }
+        });
+      }
+
+      if (cancelPasswordBtn) {
+        cancelPasswordBtn.addEventListener('click', () => {
+          clearSecurityFields();
+          showSecurityStatus('Changes cancelled.');
+        });
+      }
+
+      if (changePasswordBtn) {
+        changePasswordBtn.addEventListener('click', async () => {
+          const currentPassword = currentPasswordInput ? currentPasswordInput.value : '';
+          const newPassword = newPasswordInput ? newPasswordInput.value : '';
+          const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
+
+          if (!currentPassword || !newPassword || !confirmPassword) {
+            showSecurityStatus('Please fill all password fields.', 'error');
+            return;
+          }
+
+          if (newPassword.length < 8) {
+            showSecurityStatus('New password must be at least 8 characters long.', 'error');
+            return;
+          }
+
+          if (newPassword !== confirmPassword) {
+            showSecurityStatus('New password and confirm password do not match.', 'error');
+            return;
+          }
+
+          changePasswordBtn.disabled = true;
+          showSecurityStatus('Changing password...');
+
+          try {
+            const response = await fetch(PASSWORD_ENDPOINT, {
+              method: 'PUT',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ currentPassword, newPassword, confirmPassword })
+            });
+
+            const result = await parseApiResponse(response);
+            if (!response.ok) {
+              if (response.status === 401) {
+                window.location.replace(LOGIN_PAGE_URL);
+                return;
+              }
+              throw new Error(result.message || 'Could not change password');
+            }
+
+            clearSecurityFields();
+            showSecurityStatus(result.message || 'Password changed successfully.', 'success');
+          } catch (error) {
+            showSecurityStatus(error.message || 'Could not change password.', 'error');
+          } finally {
+            changePasswordBtn.disabled = false;
+          }
+        });
+      }
+
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', async () => {
+          showDeleteStatus('');
+
+          const reason = deleteReasonInput ? deleteReasonInput.value.trim() : '';
+          if (!reason) {
+            showDeleteStatus('Reason is required to delete your account.', 'error');
+            return;
+          }
+
+          const confirmed = deleteConfirmInput ? deleteConfirmInput.checked : false;
+          if (!confirmed) {
+            showDeleteStatus('Please confirm account deletion by selecting the checkbox.', 'error');
+            return;
+          }
+
+          const originalLabel = deleteBtn.textContent;
+          deleteBtn.disabled = true;
+          deleteBtn.textContent = 'Deleting...';
+          showDeleteStatus('Deleting account...');
+
+          try {
+            const response = await fetch(PROFILE_ENDPOINT, {
+              method: 'DELETE',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ reason, confirmed })
+            });
+
+            const result = await parseApiResponse(response);
+            if (!response.ok) {
+              if (response.status === 401) {
+                window.location.replace(LOGIN_PAGE_URL);
+                return;
+              }
+              throw new Error(result.message || 'Could not delete account');
+            }
+
+            showDeleteStatus(result.message || 'Account deleted successfully.', 'success');
+            setTimeout(() => {
+              window.location.href = HOME_PAGE_URL;
+            }, 900);
+          } catch (error) {
+            showDeleteStatus(error.message || 'Could not delete account.', 'error');
+          } finally {
+            deleteBtn.disabled = false;
+            deleteBtn.textContent = originalLabel;
+          }
+        });
+      }
+
+      if (deleteCancelBtn) {
+        deleteCancelBtn.addEventListener('click', () => {
+          clearDeleteForm();
+          showDeleteStatus('Deletion cancelled.');
+        });
+      }
+    })();
+  </script>
+  <script src="assets/js/cursor.js"></script>
+</body>
+</html>

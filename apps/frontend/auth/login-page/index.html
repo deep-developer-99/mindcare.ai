@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindCare Login</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="../../assets/css/cursor.css" />
+</head>
+
+<body>
+  <main class="container">
+    <form id="loginForm" novalidate aria-describedby="formErrors" class="card" autocomplete="on">
+      <h1 class="title">Welcome Back</h1>
+      <p class="subtitle">Log in with your mobile number or email</p>
+
+      <div class="field-group" id="identifierField">
+        <label for="identifier">Mobile Number or Email</label>
+        <input type="text" id="identifier" name="identifier" inputmode="email" autocomplete="username" required
+          aria-required="true" aria-describedby="identifierError" placeholder="you@example.com or +1 555 123 4567" />
+        <div class="field-hint">Ex: +1 555 123 4567 or user@example.com</div>
+        <p class="error" id="identifierError" role="alert" aria-live="polite"></p>
+      </div>
+
+      <div class="field-group" id="passwordField">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" autocomplete="current-password" required
+            aria-required="true" aria-describedby="passwordError" minlength="6" />
+          <button type="button" id="togglePassword" class="toggle-password" aria-label="Show password"
+            aria-pressed="false">👁️</button>
+        </div>
+        <p class="error" id="passwordError" role="alert" aria-live="polite"></p>
+      </div>
+
+      <div class="options-row">
+        <label class="remember">
+          <input type="checkbox" name="remember" id="remember" />
+          <span>Remember me</span>
+        </label>
+        <a href="#" id="forgotPasswordLink" class="forgot-link" aria-label="Forgot password (opens recovery flow)">Forgot password?</a>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn primary" id="submitBtn">Log In</button>
+      </div>
+      <div id="formErrors" class="visually-hidden" aria-live="assertive"></div>
+      <div class="auth-switch">Don't have an account? <a href="../index.html">Signup</a></div>
+    </form>
+
+    <div id="forgotModal" class="forgot-modal hidden" role="dialog" aria-modal="true" aria-labelledby="forgotTitle">
+      <div class="forgot-card">
+        <button type="button" id="closeForgotModal" class="forgot-close" aria-label="Close forgot password dialog">&times;</button>
+        <h2 id="forgotTitle">Reset Password</h2>
+        <p class="forgot-subtitle">Choose where you want to receive your OTP and continue in steps.</p>
+        <p id="forgotStatus" class="forgot-status" aria-live="polite"></p>
+
+        <section class="forgot-step" data-step="1">
+          <div class="field-group">
+            <label for="recoveryMethod">Recover using</label>
+            <select id="recoveryMethod">
+              <option value="email">Gmail / Email</option>
+              <option value="mobile">Mobile Number</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="recoveryIdentifier">Email or Mobile</label>
+            <input type="text" id="recoveryIdentifier" placeholder="you@example.com" />
+          </div>
+          <div class="actions">
+            <button type="button" id="sendOtpBtn" class="btn primary">Send OTP</button>
+          </div>
+          <p id="devOtpHint" class="field-hint hidden"></p>
+        </section>
+
+        <section class="forgot-step hidden" data-step="2">
+          <div class="field-group">
+            <label for="recoveryOtp">Enter OTP</label>
+            <input type="text" id="recoveryOtp" placeholder="6-digit OTP" maxlength="6" inputmode="numeric" />
+          </div>
+          <div class="actions split">
+            <button type="button" id="verifyOtpBtn" class="btn primary">Verify OTP</button>
+            <button type="button" id="resendOtpBtn" class="btn secondary">Resend OTP</button>
+          </div>
+        </section>
+
+        <section class="forgot-step hidden" data-step="3">
+          <div class="field-group">
+            <label for="resetNewPassword">New Password</label>
+            <input type="password" id="resetNewPassword" placeholder="At least 8 characters" />
+          </div>
+          <div class="field-group">
+            <label for="resetConfirmPassword">Confirm New Password</label>
+            <input type="password" id="resetConfirmPassword" placeholder="Re-enter new password" />
+          </div>
+          <div class="actions split">
+            <button type="button" id="resetPasswordBtn" class="btn primary">Submit</button>
+            <button type="button" id="cancelResetBtn" class="btn secondary">Cancel</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+  <script src="../../assets/js/cursor.js"></script>
+</body>
+
+</html>

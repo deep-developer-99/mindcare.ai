@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCare AI | Blog</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font family -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .deep-ocean-bg {
+            background: linear-gradient(135deg, #0d111c 0%, #1a1f3a 100%);
+        }
+
+        .primary-text {
+            color: #7c3aed;
+            background: linear-gradient(135deg, #7c3aed, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(124, 58, 237, 0.5), 0 0 60px rgba(6, 182, 212, 0.2);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse-scale {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .fade-in-down {
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        /* ===== Custom Navbar Styles (matching home page) ===== */
+        nav {
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease-in-out;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+        }
+
+        /* Navigation links hover effect */
+        nav a {
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 2px;
+            background-color: #fb7185;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Login button hover */
+        nav a.login-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Mobile menu styling */
+        #mobile-menu a {
+            display: block;
+            padding: 12px 16px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        #mobile-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            padding-top: 0;
+        }
+
+        /* Hero Section Title */
+        .hero-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #06b6d4 50%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+            letter-spacing: -1px;
+        }
+
+        /* Featured Cards */
+        .featured-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            animation: fadeInUp 1s ease-out backwards;
+            cursor: pointer;
+        }
+
+        .featured-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .featured-card:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .featured-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.3) 0%, transparent 50%);
+            animation: rotate-gradient 8s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes rotate-gradient {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .featured-card:hover::before {
+            opacity: 1;
+        }
+
+        .featured-card img {
+            transition: all 0.5s ease;
+            filter: brightness(0.85);
+        }
+
+        .featured-card:hover img {
+            transform: scale(1.1) rotate(2deg);
+            filter: brightness(1);
+        }
+
+        .featured-card .absolute {
+            z-index: 10;
+            transition: all 0.4s ease;
+        }
+
+        .featured-card:hover .absolute {
+            transform: translateY(-5px);
+        }
+
+        /* Blog Post Cards */
+        .blog-article {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            animation: fadeInUp 0.8s ease-out backwards;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-article:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .blog-article:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .blog-article::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .blog-article:hover::before {
+            left: 100%;
+        }
+
+        .blog-article:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%);
+            border-color: rgba(124, 58, 237, 0.4);
+            box-shadow: 0 20px 40px rgba(124, 58, 237, 0.2), 0 0 60px rgba(6, 182, 212, 0.1);
+        }
+
+        .blog-article img {
+            border-radius: 12px;
+            transition: all 0.5s ease;
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        .blog-article:hover img {
+            transform: scale(1.08) rotate(1deg);
+            filter: brightness(1.1) contrast(1.2);
+        }
+
+        /* Text Animations */
+        .blog-article h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .blog-article:hover h3 {
+            transform: translateX(5px);
+        }
+
+        .blog-article p {
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .blog-article:hover p {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Meta Info */
+        .meta-info {
+            color: rgba(124, 58, 237, 0.8);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .blog-article:hover .meta-info {
+            color: rgba(6, 182, 212, 1);
+        }
+
+        /* Read More Links */
+        .read-more {
+            color: #06b6d4;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .read-more::after {
+            content: '→';
+            margin-left: 6px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .read-more:hover {
+            color: #7c3aed;
+            transform: translateX(3px);
+        }
+
+        .read-more:hover::after {
+            transform: translateX(4px);
+        }
+
+        /* Section Title */
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(124, 58, 237, 0.3);
+            animation: slideInLeft 0.8s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .section-title:hover {
+            border-bottom-color: rgba(124, 58, 237, 0.6);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(124, 58, 237, 0.2);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        footer:hover p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+
+            .featured-card .absolute {
+                padding: 1.5rem;
+            }
+
+            .featured-card img {
+                height: 16rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .blog-article {
+                padding: 16px;
+            }
+
+            .blog-article:hover {
+                transform: translateY(-4px);
+            }
+
+            nav .h-20 {
+                height: 4.25rem;
+            }
+
+            nav img[alt="MindCare Logo"] {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+
+            nav .opacity-75 span {
+                font-size: 1.1rem;
+            }
+
+            .featured-card .absolute {
+                padding: 1.25rem;
+            }
+
+            .featured-card h2 {
+                font-size: 1.4rem !important;
+                line-height: 1.25;
+            }
+
+            .featured-card p {
+                font-size: 0.82rem !important;
+            }
+
+            .meta-info {
+                font-size: 0.82rem;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .hero-title {
+                font-size: 1.65rem;
+                margin-bottom: 1rem;
+                letter-spacing: -0.2px;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+                margin-bottom: 1.25rem;
+            }
+
+            nav .h-20 {
+                height: 3.75rem;
+            }
+
+            nav img[alt="MindCare Logo"] {
+                width: 2.2rem;
+                height: 2.2rem;
+            }
+
+            nav .opacity-75 span {
+                font-size: 0.96rem;
+            }
+
+            .featured-card img {
+                height: 12rem;
+            }
+
+            .featured-card .absolute {
+                padding: 0.95rem;
+            }
+
+            .featured-card h2 {
+                font-size: 1.15rem !important;
+                margin-top: 0.4rem !important;
+            }
+
+            .blog-article {
+                padding: 14px;
+                border-radius: 12px;
+            }
+
+            .blog-article h3 {
+                font-size: 1.2rem;
+            }
+
+            .read-more {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/css/cursor.css">
+    <link rel="stylesheet" href="../assets/css/shared-footer.css">
+    <link rel="stylesheet" href="../assets/css/shared-profile.css">
+</head>
+
+<body>
+    <script>
+        const IS_BLOG_PAGE = window.location.pathname.includes('/blog/');
+        const LOGIN_PAGE_URL = window.location.protocol === 'file:'
+            ? (IS_BLOG_PAGE ? '../auth/login-page/index.html' : 'auth/login-page/index.html')
+            : '/auth/login-page/index.html';
+        const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+        const VERIFY_ENDPOINT = `${API_BASE}/api/auth/verify`;
+        let verifyRequest = null;
+
+        function verifySession() {
+            if (!verifyRequest) {
+                verifyRequest = fetch(VERIFY_ENDPOINT, {
+                    method: 'GET',
+                    credentials: 'include',
+                    cache: 'no-store'
+                })
+                    .then((response) => response.ok)
+                    .catch(() => false)
+                    .finally(() => {
+                        verifyRequest = null;
+                    });
+            }
+            return verifyRequest;
+        }
+
+        function updateAuthUi(isAuthenticated) {
+            const desktopLoginWrap = document.getElementById('desktop-login-wrap');
+            const mobileLoginLink = document.getElementById('mobile-login-link');
+            const desktopProfileWrap = document.getElementById('desktop-profile-wrap');
+            const mobileProfileWrap = document.getElementById('mobile-profile-wrap');
+
+            if (desktopLoginWrap) desktopLoginWrap.style.display = isAuthenticated ? 'none' : 'inline-flex';
+            if (mobileLoginLink) mobileLoginLink.style.display = isAuthenticated ? 'none' : 'block';
+            if (desktopProfileWrap) desktopProfileWrap.style.display = isAuthenticated ? 'inline-flex' : 'none';
+            if (mobileProfileWrap) mobileProfileWrap.style.display = isAuthenticated ? 'inline-flex' : 'none';
+        }
+
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Close menu when a link is clicked
+            const mobileMenuLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            verifySession().then(updateAuthUi);
+        });
+    </script>
+
+    <!-- Navigation Bar -->
+    <nav class="w-full bg-black/95 sticky top-0 z-50">
+        <div class="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+
+                <!-- LEFT: Logo + Brand (DISABLED) -->
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 opacity-75">
+                        <img src="LOGO.jpg" alt="MindCare Logo"
+                            class="w-14 h-14 object-contain border-2 border-transparent">
+                        <span class="text-white text-2xl font-bold tracking-tight">MindCare <span
+                                class="text-rose-500 font-extrabold">AI</span></span>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Desktop links -->
+                <div class="hidden md:flex items-center space-x-8 text-base font-medium">
+                    <a href="../Him2.html"
+                        class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+                        Home
+                        <span
+                            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="../jarvis-mate.html"
+                        class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+                        Talk to AI
+                        <span
+                            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="../yoga.html"
+                        class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+                        Yoga Guide
+                        <span
+                            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="../nutrimate-ai.html"
+                        class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+                        Nutritionist
+                        <span
+                            class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <div id="desktop-login-wrap" class="pl-2 border-l border-white/10">
+                        <a id="desktop-login-link" href="../auth/login-page/index.html"
+                            class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 rounded-full text-white font-semibold tracking-wide shadow-[0_0_15px_rgba(244,63,94,0.4)] hover:shadow-[0_0_25px_rgba(244,63,94,0.6)] hover:-translate-y-0.5 transition-all duration-300">
+                            Log In
+                        </a>
+                    </div>
+                    <div id="desktop-profile-wrap" data-profile-root class="mc-profile" style="display:none;">
+                        <button type="button" data-profile-toggle class="mc-profile-toggle" aria-haspopup="true"
+                            aria-expanded="false">
+                            User Profile
+                        </button>
+                        <div data-profile-menu class="mc-profile-menu">
+                            <a href="#" data-profile-settings>Settings</a>
+                            <button type="button" class="mc-profile-logout" data-profile-logout>Logout</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="p-2 rounded-md text-white/80 focus:outline-none"
+                        aria-label="Open menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile menu (hidden by default) -->
+        <div id="mobile-menu"
+            class="md:hidden hidden border-t border-white/10 bg-black/95 backdrop-blur-md absolute w-full left-0">
+            <div class="px-4 pt-4 pb-8 space-y-4">
+                <a href="../Him2.html" class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Home</a>
+                <a href="../jarvis-mate.html"
+                    class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Talk to AI</a>
+                <a href="../yoga.html" class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Yoga
+                    Guide</a>
+                <a href="../nutrimate-ai.html"
+                    class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Nutritionist</a>
+                <a id="mobile-login-link" href="../auth/login-page/index.html"
+                    class="block text-center mt-6 bg-gradient-to-r from-rose-500 to-pink-600 rounded-lg px-4 py-3 font-semibold text-white shadow-[0_0_15px_rgba(244,63,94,0.3)]">
+                    Log In
+                </a>
+                <div id="mobile-profile-wrap" data-profile-root class="mc-profile mc-profile-mobile" style="display:none;">
+                    <button type="button" data-profile-toggle class="mc-profile-toggle w-full" aria-haspopup="true"
+                        aria-expanded="false">
+                        User Profile
+                    </button>
+                    <div data-profile-menu class="mc-profile-menu">
+                        <a href="#" data-profile-settings>Settings</a>
+                        <button type="button" class="mc-profile-logout" data-profile-logout>Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Hero Section: Featured Posts -->
+        <section class="mb-20">
+            <h1 class="hero-title mb-12">The MindCare Blog</h1>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Deep Tide Calm Pic -->
+                <div class="featured-card relative overflow-hidden rounded-2xl shadow-2xl">
+                    <img src="Deep Tide Calm.jpg" alt="Deep Tide Calm Abstract Art" class="w-full h-72 object-cover"
+                        onerror="this.onerror=null; this.src='https://placehold.co/700x300/1e293b/ffffff?text=Deep+Tide+Calm+Placeholder';">
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-transparent to-transparent">
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-8">
+                        <span class="text-xs font-bold text-cyan-400 uppercase tracking-widest">⭐ Featured</span>
+                        <h2 class="text-3xl font-bold text-white mt-3 font-poppins">Deep Tide Calm</h2>
+                        <p class="text-gray-200 text-sm mt-3 leading-relaxed">Exploring the profound rest found in deep
+                            relaxation
+                            techniques.</p>
+                        <a href="#" class="read-more mt-4">Read Article</a>
+                    </div>
+                </div>
+
+                <!-- Abstract Calm -->
+                <div class="featured-card relative overflow-hidden rounded-2xl shadow-2xl">
+                    <img src="Abstract Calm.jpg" alt="Abstract Calm Pattern" class="w-full h-72 object-cover"
+                        onerror="this.onerror=null; this.src='https://placehold.co/700x300/1e293b/ffffff?text=Abstract+Calm+Placeholder';">
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-transparent to-transparent">
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-8">
+                        <span class="text-xs font-bold text-purple-400 uppercase tracking-widest">🎨 Art & Mind</span>
+                        <h2 class="text-3xl font-bold text-white mt-3 font-poppins">Abstract Calm</h2>
+                        <p class="text-gray-200 text-sm mt-3 leading-relaxed">How visual patterns influence our mental
+                            state and
+                            relaxation.</p>
+                        <a href="#" class="read-more mt-4">View Insight</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Posts Section -->
+        <section>
+            <h2 class="section-title">📚 Latest Insights</h2>
+
+            <div class="space-y-8">
+                <!-- Blog Post 1: Finding Tranquility Within -->
+                <article class="blog-article flex flex-col md:flex-row items-start gap-6">
+                    <div class="w-full md:w-1/3 flex-shrink-0">
+                        <img src="Finding Tranquility Within 2.jpg"
+                            alt="Stylized woman's head with stars and a lotus representing inner peace"
+                            class="rounded-lg object-cover w-full h-48 md:h-full"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x250/374151/ffffff?text=Tranquility+Within';">
+                    </div>
+
+                    <div class="md:w-2/3 z-10">
+                        <h3 class="primary-text mb-3">Finding Tranquility Within</h3>
+                        <p class="meta-info mb-4">By MindCare AI Team • October 28, 2025 • 5 min read</p>
+                        <p class="mb-4">
+                            In a world that constantly pulls us outward, the most profound peace is often found by
+                            turning inward. This journey isn't about escaping reality, but learning to navigate it with
+                            a stable, centered core. We explore practical steps—from mindful breathing to digital
+                            detoxes—to build a sanctuary in your own mind.
+                        </p>
+                        <a href="#" class="read-more">Continue Reading</a>
+                    </div>
+                </article>
+
+                <!-- Blog Post 2: Finding Your Inner Calm -->
+                <article class="blog-article flex flex-col md:flex-row items-start gap-6">
+                    <div class="w-full md:w-1/3 flex-shrink-0">
+                        <img src="Finding Your Inner Calm.jpg"
+                            alt="Stylized human brain split into colorful sections with a lotus flower"
+                            class="rounded-lg object-cover w-full h-48 md:h-full"
+                            onerror="this.onerror=null; this.src='https://placehold.co/400x250/374151/ffffff?text=Inner+Calm+Brain';">
+                    </div>
+
+                    <div class="md:w-2/3 z-10">
+                        <h3 class="primary-text mb-3">Finding Your Inner Calm</h3>
+                        <p class="meta-info mb-4">By MindCare AI Team • October 20, 2025 • 7 min read</p>
+                        <p class="mb-4">
+                            Inner calm is the quiet confidence that allows you to face daily challenges without losing
+                            your footing. This article delves into the neuroscience behind stress and relaxation,
+                            explaining how simple, consistent habits can rewire your brain for resilience. Discover
+                            techniques like gratitude journaling and progressive muscle relaxation.
+                        </p>
+                        <a href="#" class="read-more">Continue Reading</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <div data-shared-footer></div>
+    <script src="../assets/js/shared-profile.js"></script>
+    <script src="../assets/js/shared-footer.js"></script>
+    <script src="../assets/js/cursor.js"></script>
+</body>
+
+</html>

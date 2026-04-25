@@ -1,0 +1,57 @@
+/* Custom Cursor Styles */
+body {
+  cursor: none; /* Hide default cursor */
+}
+
+a, button, input, select, textarea, [role="button"], label {
+  cursor: none; /* Ensure interactive elements don't show default cursor */
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background-color: #f43f5e; /* Rose-500 */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease-out;
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.8);
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(244, 63, 94, 0.5); /* Semi-transparent Rose-500 */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s, background-color 0.3s, border-color 0.3s;
+  will-change: width, height, transform, border;
+}
+
+/* Hover state for interactive elements */
+.custom-cursor-ring.hovered {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(244, 63, 94, 0.1);
+  border-color: rgba(244, 63, 94, 0.8);
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
+}
+
+.custom-cursor-dot.hovered {
+  transform: translate(-50%, -50%) scale(1.5);
+  background-color: #fb7185;
+}
+
+/* Hide custom cursor when mouse leaves window */
+.custom-cursor-hidden {
+  opacity: 0;
+}

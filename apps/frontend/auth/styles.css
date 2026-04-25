@@ -1,0 +1,281 @@
+/* Background: gradient mixing pink and teal (pink and tile/teal) */
+:root{
+  /* stronger pink/teal mix requested */
+  --pink: #ff4d7e;   /* vivid pink */
+  --teal: #00796b;   /* deeper teal */
+  --card-bg: rgba(255,255,255,0.94);
+  --accent: rgba(255,255,255,0.25);
+  --btn-start: #d81e5b; /* darker pink for button */
+  --btn-end: #00695c;   /* darker teal for button */
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(1200px 800px at 70% 20%, rgba(244, 63, 94, 0.15), transparent),
+              radial-gradient(1000px 600px at 20% 80%, rgba(56, 189, 248, 0.15), transparent),
+              linear-gradient(135deg, #070a13 0%, #111827 100%);
+  color: #e5e7eb;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left));
+}
+
+.page{
+  width:100%;
+  max-width:920px;
+  margin:auto;
+}
+
+/* Card uses a softly blended background so it's part of the pink/teal mix */
+.card{
+  /* Keep the card airy but give it a premium glassy feel */
+  background: rgba(255, 255, 255, 0.03);
+  border-radius:20px;
+  padding:32px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+}
+
+.card h1{
+  margin:0 0 18px 0;
+  font-size:clamp(1.35rem, 1.1rem + 1.1vw, 1.85rem);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.row{
+  display:flex;
+  gap:16px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+
+.field{
+  flex:1 1 220px;
+  display:flex;
+  flex-direction:column;
+}
+.field.full{flex-basis:100%}
+
+label{font-size:0.9rem;color:#cbd5e1;margin-bottom:6px; font-weight: 500;}
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="date"], select, textarea{
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.12);
+  background: rgba(11, 18, 32, 0.6);
+  color: #ffffff;
+  outline:none;
+  font-size:1rem;
+  line-height:1.35;
+  transition: all 0.3s ease;
+}
+
+/* password wrapper to place eye icon inside input */
+.password-wrapper{ position: relative; }
+.password-wrapper input{ padding-right: 44px; }
+.toggle-visibility{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform: translateY(-50%);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px; height:34px;
+  border:none; background:transparent; cursor:pointer;
+  color:#94a3b8;
+  border-radius:8px;
+}
+.toggle-visibility:hover{ background: rgba(0,0,0,0.05); }
+.toggle-visibility:focus{ outline:2px solid rgba(0,0,0,0.2); outline-offset:2px; }
+.toggle-visibility .icon-eye-off{ display:none; }
+.toggle-visibility.shown .icon-eye{ display:none; }
+.toggle-visibility.shown .icon-eye-off{ display:inline; }
+
+input:focus, select:focus, textarea:focus{
+  box-shadow:0 0 0 4px rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  background: rgba(11, 18, 32, 0.85);
+}
+
+.mental{
+  border:none;
+  margin:12px 0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.mental legend{
+  /* match other labels */
+  font-weight:500;
+  margin-bottom:6px;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.mental .options{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  margin-top:6px;
+}
+
+.mental .radio{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:0.95rem;
+  color:#e5e7eb;
+}
+
+.mental input[type="radio"]{
+  width:unset;
+  height:unset;
+}
+
+.mental .details{
+  margin-top:10px;
+}
+
+.mental .details textarea{
+  /* match textarea/inputs style used elsewhere */
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid rgba(0,0,0,0.12);
+  font-size:1rem;
+  width:100%;
+  resize:vertical;
+}
+
+.actions{display:flex;justify-content:flex-end;margin-top:22px}
+.btn{
+  /* Premium button styling */
+  background: linear-gradient(135deg, var(--btn-start) 0%, var(--btn-end) 100%);
+  color:#ffffff;
+  border:none;
+  padding:14px 24px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:1rem;
+  cursor:pointer;
+  box-shadow: 0 8px 24px rgba(0, 105, 92, 0.3);
+  transition:transform .3s ease, box-shadow .3s ease, filter .3s ease;
+}
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{
+    transform:translateY(-3px);
+    filter:brightness(1.1);
+    box-shadow: 0 12px 32px rgba(0, 105, 92, 0.45);
+  }
+}
+.btn:focus{outline:3px solid rgba(255,255,255,0.08);outline-offset:2px}
+
+#message{margin-top:16px;color:#4ade80;font-weight:600}
+.auth-switch{
+  text-align:center;
+  color:#cbd5e1;
+  margin-top:16px;
+  font-size:0.95rem;
+}
+.auth-switch a{
+  color:#38bdf8;
+  text-decoration:none;
+  font-weight:600;
+}
+.auth-switch a:hover{text-decoration:underline}
+
+@media (min-width:1280px){
+  .page{max-width:980px}
+}
+
+@media (max-width:1024px){
+  body{padding:20px max(14px, env(safe-area-inset-right)) 20px max(14px, env(safe-area-inset-left))}
+  .page{max-width:860px}
+  .card{padding:28px}
+}
+
+@media (max-width:768px){
+  body{
+    align-items:flex-start;
+    padding:16px max(12px, env(safe-area-inset-right)) 16px max(12px, env(safe-area-inset-left));
+  }
+  .page{max-width:100%}
+  .card{
+    border-radius:16px;
+    padding:24px;
+  }
+  .card h1{font-size:1.35rem}
+  .row{gap:12px}
+  .field{flex:1 1 100%}
+  .actions{justify-content:stretch}
+  .btn{width:100%}
+}
+
+@media (max-width:640px){
+  .row{flex-direction:column}
+  .actions{justify-content:stretch}
+}
+
+@media (max-width:480px){
+  body{padding:12px max(10px, env(safe-area-inset-right)) 12px max(10px, env(safe-area-inset-left))}
+  .card{
+    border-radius:14px;
+    padding:18px;
+  }
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  select,
+  textarea{
+    font-size:16px;
+  }
+  .btn{padding:12px 14px}
+  .auth-switch{font-size:0.9rem}
+}
+
+@media (max-height:760px){
+  body{
+    align-items:flex-start;
+    padding-top:14px;
+    padding-bottom:14px;
+  }
+}
+
+/* show/hide password helper */
+label.showpass{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:6px;
+  font-size:0.9rem;
+  color:#cbd5e1;
+  user-select:none;
+}
+
+/* flatpickr: speed up calendar UI open/close animation */
+.flatpickr-calendar{
+  will-change: transform, opacity;
+  /* make the opening/closing very fast */
+  transition: opacity .06s linear, transform .06s cubic-bezier(.2,.9,.3,1) !important;
+}
+.flatpickr-calendar.open{opacity:1}
+.flatpickr-calendar[aria-hidden="true"], .flatpickr-calendar.hide{opacity:0; pointer-events:none}
+
+/* slightly reduce inner animation durations if present */
+.flatpickr-months, .flatpickr-weekdays, .flatpickr-days{transition-duration:.06s !important}

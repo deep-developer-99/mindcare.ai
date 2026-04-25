@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MindCare AI</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/cursor.css" />
+  <link rel="stylesheet" href="assets/css/shared-profile.css" />
+  <style>
+    /* ===== Custom CSS for MindCare AI Navbar ===== */
+    body {
+      background-color: #000;
+      /* Black background */
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease-in-out;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
+    }
+
+    /* Navigation links hover effect */
+    nav a {
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0%;
+      height: 2px;
+      background-color: white;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    /* Login button hover */
+    nav a.login-btn:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    /* Mobile menu styling */
+    #mobile-menu a {
+      display: block;
+      padding: 12px 16px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    #mobile-menu a:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Small focus ring for accessibility */
+    :focus {
+      outline: 2px solid rgba(255, 255, 255, 0.3);
+      outline-offset: 2px;
+    }
+
+    @keyframes gradientSlow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .animate-gradientSlow {
+      background-size: 200% 200%;
+      animation: gradientSlow 15s ease infinite;
+    }
+
+    @keyframes floatSlow {
+      0% {
+        transform: translateY(0px) translateX(0px);
+      }
+
+      50% {
+        transform: translateY(-25px) translateX(15px);
+      }
+
+      100% {
+        transform: translateY(0px) translateX(0px);
+      }
+    }
+
+    @keyframes floatSlow2 {
+      0% {
+        transform: translateY(0px) translateX(0px);
+      }
+
+      50% {
+        transform: translateY(30px) translateX(-20px);
+      }
+
+      100% {
+        transform: translateY(0px) translateX(0px);
+      }
+    }
+
+    @keyframes floatSlow3 {
+      0% {
+        transform: translateY(0px) translateX(0px);
+      }
+
+      50% {
+        transform: translateY(-20px) translateX(-10px);
+      }
+
+      100% {
+        transform: translateY(0px) translateX(0px);
+      }
+    }
+
+    .animate-floatSlow {
+      animation: floatSlow 10s ease-in-out infinite;
+    }
+
+    .animate-floatSlow2 {
+      animation: floatSlow2 14s ease-in-out infinite;
+    }
+
+    .animate-floatSlow3 {
+      animation: floatSlow3 18s ease-in-out infinite;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus {
+      outline: 3px solid rgba(255, 255, 255, 0.25);
+      outline-offset: 3px;
+    }
+
+    /* ===== Background Gradient + Floating Graphics Animation ===== */
+
+    /* Gradient background animation */
+    @keyframes gradientSlow {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .animate-gradientSlow {
+      background-size: 200% 200%;
+      animation: gradientSlow 15s ease infinite;
+    }
+
+    /* Floating bubble animation — soft & slow */
+    @keyframes floatSlow {
+      0% {
+        transform: translateY(0px) translateX(0px);
+      }
+
+      50% {
+        transform: translateY(-25px) translateX(15px);
+      }
+
+      100% {
+        transform: translateY(0px) translateX(0px);
+      }
+    }
+
+    @keyframes floatSlow2 {
+      0% {
+        transform: translateY(0px) translateX(0px);
+      }
+
+      50% {
+        transform: translateY(30px) translateX(-20px);
+      }
+
+      100% {
+        transform: translateY(0px) translateX(0px);
+      }
+    }
+
+    @keyframes floatSlow3 {
+      0% {
+        transform: translateY(0px) translateX(0px);
+      }
+
+      50% {
+        transform: translateY(-20px) translateX(-10px);
+      }
+
+      100% {
+        transform: translateY(0px) translateX(0px);
+      }
+    }
+
+    .animate-floatSlow {
+      animation: floatSlow 10s ease-in-out infinite;
+    }
+
+    .animate-floatSlow2 {
+      animation: floatSlow2 14s ease-in-out infinite;
+    }
+
+    .animate-floatSlow3 {
+      animation: floatSlow3 18s ease-in-out infinite;
+    }
+
+    #about h2 {
+      letter-spacing: 0.5px;
+    }
+
+    #about p {
+      transition: color 0.3s ease;
+    }
+
+    #about p:hover {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    /* Social icon base + glow on hover/focus. Kept small and subtle. */
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      /* tailwind text-gray-400 */
+      background: transparent;
+      padding: 6px;
+      border-radius: 8px;
+      transition: transform 200ms ease, color 200ms ease, box-shadow 220ms ease;
+      outline: none;
+    }
+
+    .social-icon i {
+      display: block;
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Hover / focus effect: rose color + soft pink glow + little lift */
+    .social-icon:hover,
+    .social-icon:focus {
+      color: #fb7185;
+      /* tailwind rose-500 */
+      transform: translateY(-4px) scale(1.06);
+      box-shadow: 0 6px 18px rgba(251, 113, 133, 0.18), 0 0 24px rgba(251, 113, 133, 0.10);
+    }
+
+    /* Accessible focus ring (keyboard users) */
+    .social-icon:focus {
+      box-shadow: 0 6px 18px rgba(251, 113, 133, 0.22), 0 0 32px rgba(251, 113, 133, 0.14);
+      border: 2px solid rgba(251, 113, 133, 0.12);
+    }
+
+    /* Small responsive tweak: keep icons centered on very small screens */
+    @media (max-width: 480px) {
+      .social-icon {
+        padding: 8px;
+        border-radius: 10px;
+      }
+    }
+
+    /* Neural stroke animation: draws stroke left-to-right and fades */
+    .neural-path {
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: drawStroke 3.5s linear infinite;
+      filter: drop-shadow(0 6px 12px rgba(160, 80, 200, 0.12));
+    }
+
+    .neural-path.delay-1 {
+      animation-delay: 0.7s;
+    }
+
+    .neural-path.delay-2 {
+      animation-delay: 1.4s;
+    }
+
+    @keyframes drawStroke {
+      0% {
+        stroke-dashoffset: var(--dash);
+        opacity: 0.15;
+        transform: translateY(0);
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      50% {
+        stroke-dashoffset: 0;
+        opacity: 0.95;
+      }
+
+      100% {
+        stroke-dashoffset: 0;
+        opacity: 0.25;
+      }
+    }
+
+    /* We set a CSS variable for dash length so each path animates smoothly.
+       (Using inline style fallback to ensure dash length matches stroke-dasharray.) */
+    #n1 {
+      --dash: 220;
+    }
+
+    #n2 {
+      --dash: 240;
+    }
+
+    #n3 {
+      --dash: 260;
+    }
+
+    /* Node pulse */
+    .node {
+      transform-origin: center;
+      animation: nodePulse 3s ease-in-out infinite;
+      fill: #fb7185;
+    }
+
+    @keyframes nodePulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+
+      50% {
+        transform: scale(1.45);
+        opacity: 0.45;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+    }
+
+    /* Floating icons gentle bob */
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating.delay-1 {
+      animation-delay: 0.6s;
+    }
+
+    .floating.delay-2 {
+      animation-delay: 1.2s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(-1deg);
+        opacity: 0.95;
+      }
+
+      50% {
+        transform: translateY(-10px) rotate(1deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(0) rotate(-1deg);
+        opacity: 0.95;
+      }
+    }
+
+    /* Glow when CTA (group) is hovered: we rely on Tailwind .group on CTA
+       For that we add rules that target the hero visual when .group is hovered.
+       Because the CTA is in a different element, we add a small JS-free effect:
+       add a 'group' class to a parent if you want group-hover across siblings.
+       However if you can't, the visual still animates on its own. */
+    /* soft continuous neural ambient pulse */
+    #hero-visual .absolute:first-child {
+      /* the large gradient blur */
+      transition: transform 300ms ease, opacity 300ms ease;
+    }
+
+    /* subtle pulse */
+    @keyframes ambientPulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.28;
+      }
+
+      50% {
+        transform: scale(1.03);
+        opacity: 0.36;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 0.28;
+      }
+    }
+
+    #hero-visual .absolute:first-child {
+      animation: ambientPulse 6s ease-in-out infinite;
+    }
+
+    /* make neural lines react slightly on CTA focus (optional):
+       If you add a parent .hero (wrap both left and right) with class "group",
+       then Tailwind's group-hover utility can change classes on the right.
+       For pure CSS fallback, we keep subtle animations always running. */
+
+    /* accessibility: reduce motion if user prefers reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+
+      .neural-path,
+      .node,
+      .floating,
+      #hero-visual .absolute:first-child {
+        animation: none !important;
+      }
+    }
+
+    :root {
+      --teal: #2dd4bf;
+      /* teal-400 */
+      --violet: #9b5cf6;
+      /* mix */
+      --pink: #fb7185;
+      /* pink-400 */
+      --accent-rose: #fb7185;
+      --muted: #9ca3af;
+      /* gray-400 */
+      --bg-dark: #070707;
+    }
+
+    /* Gradient heading (teal → violet → pink) */
+    .mc-gradient-text {
+      background: linear-gradient(92deg, var(--teal) 0%, var(--violet) 45%, var(--pink) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+
+    /* soft glow behind heading */
+    .mc-heading-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .mc-heading-wrap::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 50%;
+      width: 160%;
+      height: 80%;
+      background: radial-gradient(circle at 50% 30%, rgba(155, 92, 246, 0.08), rgba(251, 113, 133, 0.04), transparent 50%);
+      filter: blur(18px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Footer background subtle pulse/gradient */
+    .mc-footer {
+      background: linear-gradient(180deg, rgba(11, 7, 10, 0.95), rgba(3, 3, 3, 1));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mc-footer::before {
+      /* faint diagonal wash */
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background: linear-gradient(120deg, rgba(45, 212, 191, 0.03), transparent 25%, rgba(251, 113, 133, 0.03));
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+
+    /* newsletter success */
+    .mc-success {
+      display: none;
+      color: #86efac;
+    }
+
+    .mc-success.visible {
+      display: block;
+    }
+
+    /* Social icons */
+    .social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.02);
+      transition: transform .18s cubic-bezier(.2, .9, .2, 1), box-shadow .18s;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    .social-icon:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(155, 92, 246, 0.12);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    }
+
+    .social-icon i {
+      /* lucide icons inherit size */
+      display: block;
+    }
+
+    /* input focusglow */
+    .mc-input:focus {
+      outline: none;
+      box-shadow: 0 6px 30px rgba(251, 113, 133, 0.06), 0 2px 8px rgba(45, 212, 191, 0.04);
+      border-color: rgba(251, 113, 133, 0.6);
+    }
+
+    /* small responsive tweak to balance column heights */
+    @media (min-width: 768px) {
+      .mc-col-equal {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      #hero-visual {
+        height: 20rem;
+      }
+
+      #hero-visual .w-80 {
+        width: 16rem;
+        height: 16rem;
+      }
+
+      #hero-visual .w-72 {
+        width: 14rem;
+        height: 14rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      nav .h-20 {
+        height: 4.25rem;
+      }
+
+      nav img[alt="MindCare Logo"] {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+
+      nav .text-2xl {
+        font-size: 1.1rem;
+      }
+
+      #hero-visual {
+        height: 16rem;
+        margin-top: 1rem;
+      }
+
+      #hero-visual .w-80 {
+        width: 13rem;
+        height: 13rem;
+      }
+
+      #hero-visual .w-72 {
+        width: 11rem;
+        height: 11rem;
+      }
+
+      #about .text-4xl {
+        font-size: 1.85rem;
+      }
+
+      .fixed.bottom-8.right-8 {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      nav .h-20 {
+        height: 3.75rem;
+      }
+
+      nav img[alt="MindCare Logo"] {
+        width: 2.2rem;
+        height: 2.2rem;
+      }
+
+      nav .text-2xl {
+        font-size: 0.95rem;
+      }
+
+      #mobile-menu {
+        max-height: calc(100vh - 3.75rem);
+        overflow-y: auto;
+      }
+
+      #hero-visual {
+        height: 13rem;
+      }
+
+      #hero-visual .w-80 {
+        width: 11rem;
+        height: 11rem;
+      }
+
+      #hero-visual .w-72 {
+        width: 9.5rem;
+        height: 9.5rem;
+      }
+
+      .fixed.bottom-8.right-8 {
+        bottom: 0.75rem;
+        right: 0.75rem;
+      }
+
+      #newsletter-form {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ---------- NAVBAR (replace your existing <nav> block with this) ---------- -->
+  <nav class="w-full bg-black/95 sticky top-0 z-50">
+    <div class="w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+
+        <!-- LEFT: Logo + Brand -->
+        <div class="flex items-center gap-4">
+          <a href="#" class="flex items-center gap-4 group" aria-label="MindCare AI Home">
+            <img src="assets/images/Mindcare logo.jpg" alt="MindCare Logo"
+              class="w-14 h-14 object-contain border-2 border-transparent group-hover:border-rose-500 transition-all duration-300">
+            <span class="text-white text-2xl font-bold tracking-tight">MindCare <span
+                class="text-rose-500 font-extrabold">AI</span></span>
+          </a>
+        </div>
+
+        <!-- RIGHT: Desktop links (always on same row for desktop) -->
+        <div class="hidden md:flex items-center space-x-8 text-base font-medium">
+          <a href="jarvis-mate.html"
+            class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+            Talk to AI
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="yoga.html" onclick="return openYogaPage(event)"
+            class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+            Yoga Guide
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="/blog/Blog2.html"
+            class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+            Blog
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="nutrimate-ai.html"
+            class="relative group text-gray-300 hover:text-white transition-colors duration-300">
+            Nutritionist
+            <span
+              class="absolute -bottom-1 left-0 w-0 h-0.5 bg-rose-500 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+
+          <div id="desktop-login-wrap" class="pl-2 border-l border-white/10">
+            <a id="desktop-login-link" href="/auth/login-page/index.html"
+              class="inline-flex items-center px-6 py-2.5 bg-gradient-to-r from-rose-500 to-pink-600 rounded-full text-white font-semibold tracking-wide shadow-[0_0_15px_rgba(244,63,94,0.4)] hover:shadow-[0_0_25px_rgba(244,63,94,0.6)] hover:-translate-y-0.5 transition-all duration-300">
+              Log In
+            </a>
+          </div>
+
+          <div id="desktop-profile-wrap" data-profile-root class="mc-profile" style="display:none;">
+            <button type="button" data-profile-toggle class="mc-profile-toggle" aria-haspopup="true"
+              aria-expanded="false">
+              User Profile
+            </button>
+            <div data-profile-menu class="mc-profile-menu">
+              <a href="#" data-profile-settings>Settings</a>
+              <button type="button" class="mc-profile-logout" data-profile-logout>Logout</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-btn" class="p-2 rounded-md text-white/80 focus:outline-none" aria-label="Open menu"
+            aria-expanded="false">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile menu (hidden by default) -->
+    <div id="mobile-menu"
+      class="md:hidden hidden border-t border-white/10 bg-black/95 backdrop-blur-md absolute w-full left-0">
+      <div class="px-4 pt-4 pb-8 space-y-4">
+        <a href="jarvis-mate.html"
+          class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Talk to AI</a>
+        <a href="yoga.html" onclick="return openYogaPage(event)"
+          class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Yoga Guide</a>
+        <a href="/blog/Blog2.html" class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Blog</a>
+        <a href="nutrimate-ai.html"
+          class="block text-gray-300 hover:text-white hover:pl-2 transition-all">Nutritionist</a>
+        <a id="mobile-login-link" href="/auth/login-page/index.html"
+          class="block text-center mt-6 bg-gradient-to-r from-rose-500 to-pink-600 rounded-lg px-4 py-3 font-semibold text-white shadow-[0_0_15px_rgba(244,63,94,0.3)]">
+          Log In
+        </a>
+        <div id="mobile-profile-wrap" data-profile-root class="mc-profile mc-profile-mobile mt-4" style="display:none;">
+          <button type="button" data-profile-toggle class="mc-profile-toggle w-full" aria-haspopup="true"
+            aria-expanded="false">
+            User Profile
+          </button>
+          <div data-profile-menu class="mc-profile-menu">
+            <a href="#" data-profile-settings>Settings</a>
+            <button type="button" class="mc-profile-logout" data-profile-logout>Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ---------- HERO SECTION (left content + background) ---------- -->
+  <section class="relative w-full bg-black text-white py-24 overflow-hidden">
+    <!-- animated/background elements (behind content) -->
+    <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div class="absolute inset-0 bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] animate-gradientSlow">
+      </div>
+
+      <span class="absolute w-48 h-48 bg-teal-400/20 rounded-full blur-3xl top-20 left-10 animate-floatSlow"></span>
+      <span
+        class="absolute w-64 h-64 bg-indigo-400/20 rounded-full blur-3xl bottom-10 right-16 animate-floatSlow2"></span>
+      <span
+        class="absolute w-32 h-32 bg-emerald-300/20 rounded-full blur-2xl top-1/3 right-1/3 animate-floatSlow3"></span>
+
+      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+    </div>
+
+    <!-- CONTENT: ensure this is above background with z-index -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 items-center">
+      <!-- LEFT SIDE CONTENT -->
+      <div class="space-y-6 md:pr-10 pl-6 sm:pl-10 lg:pl-16">
+        <h1
+          class="text-5xl sm:text-6xl font-bold tracking-wide bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+          MindCare AI
+        </h1>
+
+        <p class="text-gray-300 text-lg leading-relaxed max-w-md">
+          A complete wellness companion that listens to your mind, aligns your body,
+          and nourishes your soul. Start your journey towards better mental and emotional health today.
+        </p>
+
+        <button id="create-account-btn"
+          class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition transform hover:scale-105 relative z-20"
+          onclick="window.location.href='/auth'">
+          Create Account
+        </button>
+      </div>
+
+      <!-- RIGHT SIDE (kept empty for now; you can add images / table) -->
+      <div id="hero-visual" class="relative w-full h-96 flex items-center justify-center">
+        <!-- Outer glow / subtle gradient -->
+        <div class="absolute inset-0 pointer-events-none">
+          <div
+            class="absolute -left-20 -top-10 w-96 h-96 rounded-full opacity-30 blur-3xl bg-gradient-to-tr from-rose-500 to-violet-600 transform rotate-12">
+          </div>
+        </div>
+
+        <!-- Main composite SVG: face silhouette + neural lines -->
+        <div class="relative w-80 h-80 flex items-center justify-center">
+          <!-- face silhouette (soft, semi-transparent) -->
+          <svg class="absolute w-72 h-72 transform translate-y-1" viewBox="0 0 200 200" aria-hidden="true">
+            <defs>
+              <linearGradient id="skinGrad" x1="0" x2="1">
+                <stop offset="0%" stop-color="#0f172a" stop-opacity="0.85" />
+                <stop offset="100%" stop-color="#0b1220" stop-opacity="0.6" />
+              </linearGradient>
+              <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- silhouette -->
+            <path
+              d="M100 10c28 0 50 28 50 62 0 20-10 32-10 46 0 24 10 44-20 44-24 0-32-18-48-18-16 0-22 18-46 18-30 0-20-20-20-44 0-14-10-26-10-46C50 38 72 10 100 10z"
+              fill="url(#skinGrad)" opacity="0.55" filter="url(#softGlow)"></path>
+          </svg>
+
+          <!-- neural lines (animated strokes) -->
+          <svg class="absolute w-72 h-72" viewBox="0 0 200 200" aria-hidden="true">
+            <!-- subtle background network -->
+            <g stroke="rgba(255,255,255,0.06)" stroke-width="1" fill="none" stroke-linecap="round">
+              <path d="M30 80 C55 40, 95 30, 120 60" />
+              <path d="M50 120 C80 150, 120 160, 150 130" />
+              <path d="M40 50 C80 20, 140 40, 160 80" />
+            </g>
+
+            <!-- animated neural strokes (glowing) -->
+            <g stroke="url(#neonGrad)" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.95">
+              <!-- define gradient used below -->
+              <defs>
+                <linearGradient id="neonGrad" x1="0" x2="1">
+                  <stop offset="0%" stop-color="#fb7185" />
+                  <stop offset="60%" stop-color="#c084fc" />
+                  <stop offset="100%" stop-color="#60a5fa" />
+                </linearGradient>
+
+              </defs>
+
+              <!-- moving path 1 -->
+              <path id="n1" d="M34 90 C64 58, 96 46, 128 72" stroke-dasharray="220" stroke-dashoffset="220"
+                class="neural-path" />
+              <!-- moving path 2 -->
+              <path id="n2" d="M48 120 C78 150, 118 156, 148 128" stroke-dasharray="240" stroke-dashoffset="240"
+                class="neural-path delay-1" />
+              <!-- moving path 3 -->
+              <path id="n3" d="M42 48 C84 18, 138 36, 158 78" stroke-dasharray="260" stroke-dashoffset="260"
+                class="neural-path delay-2" />
+            </g>
+
+            <!-- small node circles that pulse -->
+            <g class="neural-nodes" fill="#fb7185" opacity="0.95">
+              <circle cx="34" cy="90" r="2.8" class="node"></circle>
+              <circle cx="128" cy="72" r="2.8" class="node"></circle>
+              <circle cx="48" cy="120" r="2.8" class="node"></circle>
+              <circle cx="148" cy="128" r="2.8" class="node"></circle>
+              <circle cx="42" cy="48" r="2.8" class="node"></circle>
+              <circle cx="158" cy="78" r="2.8" class="node"></circle>
+            </g>
+          </svg>
+        </div>
+        <!-- Floating icons (meditation, chat, leaf, heart) -->
+        <div aria-hidden="true" class="pointer-events-none">
+          <!-- chat bubble -->
+          <div
+            class="absolute -right-6 -top-6 w-10 h-10 flex items-center justify-center rounded-lg bg-black/40 border border-rose-600/30 shadow-lg floating delay-0">
+            <svg class="w-5 h-5 text-rose-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+
+          <!-- leaf -->
+          <div
+            class="absolute -left-6 -top-4 w-10 h-10 flex items-center justify-center rounded-lg bg-black/40 border border-green-400/20 shadow floating delay-1">
+            <svg class="w-5 h-5 text-green-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15c-2 0-4-2-6-4s-4-4-6-4"></path>
+              <path d="M3 21c6-6 9-9 18-9"></path>
+            </svg>
+          </div>
+
+          <!-- heart -->
+          <div
+            class="absolute right-10 bottom-8 w-11 h-11 flex items-center justify-center rounded-lg bg-black/40 border border-pink-400/20 shadow floating delay-2">
+            <svg class="w-5 h-5 text-pink-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    </div>
+  </section>
+  <!-- ABOUT SECTION -->
+  <section id="about" class="relative w-full py-24 bg-black text-white overflow-hidden">
+
+    <!-- Decorative blurred gradient circles (background aesthetics) -->
+    <div class="absolute inset-0 overflow-hidden">
+      <span class="absolute w-64 h-64 bg-pink-500/10 rounded-full blur-3xl top-20 left-10"></span>
+      <span class="absolute w-80 h-80 bg-teal-400/10 rounded-full blur-3xl bottom-10 right-16"></span>
+    </div>
+    <div class="relative z-10 max-w-6xl mx-auto px-6 lg:px-8 text-center">
+      <!-- Heading -->
+      <h2 class="text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-teal-300 
+    bg-clip-text text-transparent">
+        About MindCare AI
+      </h2>
+
+      <!-- Subheading / Line -->
+      <p class="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed mb-10">
+        MindCare AI is a compassionate digital companion dedicated to improving your mental well-being.
+        We combine artificial intelligence, mindfulness techniques, and expert guidance to provide a
+        safe, supportive, and private space for everyone seeking balance, clarity, and healing.
+      </p>
+
+      <!-- Optional divider -->
+      <div class="flex justify-center mb-12">
+        <div class="w-24 h-1 bg-gradient-to-r from-pink-500 to-teal-400 rounded-full"></div>
+      </div>
+
+      <!-- 3 key points (you can edit or remove) -->
+      <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 text-left">
+        <div
+          class="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-pink-400/40 transition">
+          <h3 class="text-xl font-semibold mb-3 text-pink-300">Our Mission</h3>
+          <p class="text-gray-300 text-sm leading-relaxed">
+            To make emotional care accessible, stigma-free, and deeply personal —
+            empowering people to understand and nurture their mental health anytime, anywhere.
+          </p>
+        </div>
+
+        <div
+          class="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-teal-400/40 transition">
+          <h3 class="text-xl font-semibold mb-3 text-teal-300">Our Vision</h3>
+          <p class="text-gray-300 text-sm leading-relaxed">
+            A world where mental wellness is part of everyday life,
+            guided by empathy, technology, and human understanding.
+          </p>
+        </div>
+
+        <div
+          class="p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 hover:border-pink-400/40 transition">
+          <h3 class="text-xl font-semibold mb-3 text-pink-300">Our Promise</h3>
+          <p class="text-gray-300 text-sm leading-relaxed">
+            Your privacy, safety, and peace of mind come first —
+            every conversation with MindCare AI stays secure and confidential.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 💬 Floating Chat Button (bottom-right corner of hero section) -->
+  <button
+    class="fixed bottom-8 right-8 bg-pink-500 hover:bg-pink-600 text-white p-4 rounded-full shadow-lg transition transform hover:scale-110"
+    aria-label="Chat with MindCare AI">
+    <!-- Chat Icon (white SVG) -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="white"
+      stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8m-8 4h5m9-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </button>
+  <!-- ==================== FOOTER START ==================== -->
+
+  <footer id="footer" class="mc-footer text-gray-400 py-12 relative overflow-hidden">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- 3 columns on md+, stacked on mobile -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+        <!-- Brand Info -->
+        <div class="space-y-4 mc-col-equal">
+          <div>
+            <h3 class="text-3xl mc-gradient-text mc-heading-wrap">MINDCARE AI</h3>
+          </div>
+          <p class="max-w-xs text-gray-400">
+            The complete wellness companion that listens to your mind, aligns your body, and nourishes your soul.
+          </p>
+        </div>
+        <!-- Newsletter -->
+        <div class="mc-col-equal">
+          <h4 class="text-xl font-semibold text-white mb-4">Subscribe to our Newsletter</h4>
+          <form id="newsletter-form" class="space-y-4 w-full max-w-md">
+            <div>
+              <label for="nl-name" class="block text-sm font-medium text-gray-400">Name *</label>
+              <input type="text" id="nl-name" name="name" required placeholder="Your Name"
+                class="mc-input mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none transition" />
+            </div>
+            <div>
+              <label for="nl-email" class="block text-sm font-medium text-gray-400">Email *</label>
+              <input type="email" id="nl-email" name="email" required placeholder="example@mysite.com"
+                class="mc-input mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none transition" />
+            </div>
+            <div class="flex items-center">
+              <input id="subscribe-checkbox" name="subscribe-checkbox" type="checkbox"
+                class="h-4 w-4 text-rose-600 border-gray-600 rounded focus:ring-rose-500 bg-gray-800" required>
+              <label for="subscribe-checkbox" class="ml-2 block text-sm text-gray-400">Yes, subscribe me to your
+                newsletter. *</label>
+            </div>
+
+            <div class="flex flex-col space-y-2">
+              <button type="submit" id="nl-submit"
+                class="w-full sm:w-auto px-6 py-2 bg-rose-600 text-white font-medium rounded-lg hover:bg-rose-700 transition shadow-md focus:outline-none focus:ring-2 focus:ring-rose-500/60">
+                Submit
+              </button>
+              <div id="newsletter-success" class="mc-success text-sm hidden" style="display: none; color: #4ade80;">
+              </div>
+              <div id="newsletter-error" class="text-sm hidden" style="display: none; color: #ef4444;"></div>
+            </div>
+          </form>
+        </div>
+        <!-- Social -->
+        <div class="mc-col-equal">
+          <h4 class="text-xl font-semibold text-white mb-4">Follow Us On</h4>
+          <div class="flex space-x-4">
+            <a href="#" aria-label="Facebook" class="social-icon" title="Facebook">
+              <svg class="w-5 h-5 text-gray-200" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+            <a href="#" aria-label="Twitter" class="social-icon" title="Twitter">
+              <svg class="w-5 h-5 text-gray-200" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/18.deep_" target="_blank" aria-label="Instagram" class="social-icon"
+              title="Instagram">
+              <svg class="w-5 h-5 text-gray-200" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="social-icon" title="LinkedIn">
+              <svg class="w-5 h-5 text-gray-200" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd"
+                  d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+          </div>
+
+          <!-- small footer note -->
+          <div class="mt-6 text-sm text-gray-500">
+            © 2025 <span class="text-rose-500 font-semibold">Mindcare AI</span>. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS for mobile toggle -->
+  <script>
+
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+
+    if (btn && menu) {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!expanded));
+        menu.classList.toggle('hidden');
+      });
+
+      menu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          menu.classList.add('hidden');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Create Lucide icons. If icons are already created, this call is safe.
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
+    } else {
+      // Fallback: try to load again in case script loaded slowly
+      window.addEventListener('load', function () {
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+      });
+    }
+
+  </script>
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+  <script>
+    const LOGIN_PAGE_URL = '/auth/login-page/index.html';
+    const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5002' : '';
+    const VERIFY_ENDPOINT = `${API_BASE}/api/auth/verify`;
+    let verifyRequest = null;
+
+    function verifySession() {
+      if (!verifyRequest) {
+        verifyRequest = fetch(VERIFY_ENDPOINT, {
+          method: 'GET',
+          credentials: 'include',
+          cache: 'no-store'
+        })
+          .then((response) => response.ok)
+          .catch(() => false)
+          .finally(() => {
+            verifyRequest = null;
+          });
+      }
+      return verifyRequest;
+    }
+
+    function getRequestedNavigation(event) {
+      const link = (event && event.currentTarget) || (event && event.target && event.target.closest && event.target.closest('a'));
+      if (!link) return { href: null, target: null };
+      return {
+        href: link.getAttribute('href'),
+        target: link.getAttribute('target')
+      };
+    }
+
+    function continueToRequestedFeature(requestedNav) {
+      const href = requestedNav && requestedNav.href ? requestedNav.href : null;
+      const target = requestedNav && requestedNav.target ? requestedNav.target : null;
+
+      if (href && href.startsWith('#')) {
+        window.location.hash = href;
+        return;
+      }
+
+      if (href && href !== '#') {
+        if (target === '_blank') {
+          window.open(href, '_blank');
+        } else {
+          window.location.href = href;
+        }
+      }
+    }
+
+    function guardFeatureAccess(event, featureName) {
+      if (event) event.preventDefault();
+      const requestedNav = getRequestedNavigation(event);
+
+      verifySession().then((isAuthenticated) => {
+        if (isAuthenticated) {
+          continueToRequestedFeature(requestedNav);
+          return;
+        }
+
+        alert(`Please login first to use ${featureName}.`);
+        window.location.href = LOGIN_PAGE_URL;
+      });
+
+      return false;
+    }
+
+    function handleTalkToAiClick(event) {
+      if (event) event.preventDefault();
+      return false;
+    }
+
+    function updateAuthUi(isAuthenticated) {
+      if (!isAuthenticated) return;
+
+      const desktopLoginWrap = document.getElementById('desktop-login-wrap');
+      const mobileLoginLink = document.getElementById('mobile-login-link');
+      const desktopProfileWrap = document.getElementById('desktop-profile-wrap');
+      const mobileProfileWrap = document.getElementById('mobile-profile-wrap');
+      const createAccountBtn = document.getElementById('create-account-btn');
+
+      if (desktopLoginWrap) desktopLoginWrap.style.display = 'none';
+      if (mobileLoginLink) mobileLoginLink.style.display = 'none';
+      if (desktopProfileWrap) desktopProfileWrap.style.display = 'inline-flex';
+      if (mobileProfileWrap) mobileProfileWrap.style.display = 'inline-flex';
+      if (createAccountBtn) createAccountBtn.style.display = 'none';
+    }
+
+    // render lucide icons
+    window.addEventListener('load', function () {
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    });
+
+    // Newsletter form submission
+    document.addEventListener('DOMContentLoaded', () => {
+      verifySession().then(updateAuthUi);
+
+      const newsletterForm = document.getElementById('newsletter-form');
+      if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = document.getElementById('nl-name').value;
+          const email = document.getElementById('nl-email').value;
+          const successEl = document.getElementById('newsletter-success');
+          const errorEl = document.getElementById('newsletter-error');
+          const btn = document.getElementById('nl-submit');
+
+          successEl.style.display = 'none';
+          errorEl.style.display = 'none';
+          btn.textContent = 'Submitting...';
+          btn.disabled = true;
+
+          try {
+            const res = await fetch('http://localhost:5002/api/newsletter/subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+              successEl.textContent = data.message || 'Thank you for subscribing!';
+              successEl.style.display = 'block';
+              newsletterForm.reset();
+              setTimeout(() => { successEl.style.display = 'none'; }, 5000);
+            } else {
+              errorEl.textContent = data.message || 'Subscription failed. Try again.';
+              errorEl.style.display = 'block';
+            }
+          } catch (err) {
+            console.error(err);
+            errorEl.textContent = 'Network error. Is the server running?';
+            errorEl.style.display = 'block';
+          } finally {
+            btn.textContent = 'Submit';
+            btn.disabled = false;
+          }
+        });
+      }
+    });
+  </script>
+  <script>
+    function openYogaPage(event) {
+      return guardFeatureAccess(event, 'Yoga Guide');
+    }
+  </script>
+  <script src="assets/js/shared-profile.js"></script>
+  <script src="assets/js/cursor.js"></script>
+</body>
+
+</html>

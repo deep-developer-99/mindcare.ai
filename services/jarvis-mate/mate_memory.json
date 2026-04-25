@@ -1,0 +1,14 @@
+{
+  "user": {
+    "last_emotion": {
+      "emotion": "anxious",
+      "ts": 1771397018.0672212
+    }
+  },
+  "interactions": [
+    {
+      "user": "I'm feeling anxious about my exams tomorrow.",
+      "timestamp": 1771397018.065391
+    }
+  ]
+}

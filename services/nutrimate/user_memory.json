@@ -1,0 +1,15 @@
+{
+    "aman": {
+        "name": "aman",
+        "age": 22,
+        "weight": 56.0,
+        "height": 168.0,
+        "goal": "weight loss",
+        "condition": "none",
+        "lifestyle": "moderate",
+        "diet_type": "vegan",
+        "bmi": 19.84,
+        "type": "Normal",
+        "gender": "male"
+    }
+}

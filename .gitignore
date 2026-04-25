@@ -1,0 +1,10 @@
+node_modules/
+services/backend/node_modules/
+
+venv/
+services/jarvis-mate/venv/
+
+.env
+services/backend/.env
+__pycache__/
+*.log
