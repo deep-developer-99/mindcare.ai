@@ -382,7 +382,7 @@
         localStorage.setItem('mindcare_user_email', result.user.email);
       }
 
-      window.location.href = '../../yoga.html';
+      window.location.href = '/yoga.html';
     } catch (err) {
       console.error('Login Error:', err);
       setFieldError(identifier, idErr, 'Server is not reachable. Please try again later.');

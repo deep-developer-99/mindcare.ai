@@ -131,7 +131,7 @@
       message.style.color = '#14532d';
       message.textContent = 'Account created successfully! You can now login.';
       
-      // Optionally redirect to login page
+      // Redirect to login page
       setTimeout(() => {
         window.location.href = '/auth/login-page/index.html';
       }, 2000);
