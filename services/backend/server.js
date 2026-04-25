@@ -18,8 +18,7 @@ const corsOptions = {
       'http://localhost:5002',
       'http://127.0.0.1:5000',
       'https://localhost',
-      // Add your Netlify URL here:
-      // 'https://your-mindcare-domain.netlify.app'
+      'https://adorable-taiyaki-e8b484.netlify.app'
     ];
 
     // In production, check against actual frontend URL

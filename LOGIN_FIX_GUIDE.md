@@ -3,11 +3,13 @@
 ## Issues Found & Fixed ✅
 
 ### 1. **Redirect Path Issue**
+
 - **Problem**: Login redirected to relative path `../../yoga.html`
 - **Fix**: Changed to absolute path `/yoga.html`
 - **File**: `apps/frontend/auth/login-page/script.js`
 
 ### 2. **CORS Configuration Issue** ⚠️ CRITICAL
+
 - **Problem**: Backend had `cors({ origin: true, credentials: true })`
   - This is **invalid** - can't use both `origin: true` AND `credentials: true`
   - Browsers reject cookies when this combination is used
@@ -34,6 +36,7 @@ MONGO_URI=mongodb+srv://...
 ### Step 2: Update Backend server.js (Already Done ✓)
 
 Your CORS is now configured to:
+
 - Allow credentials (cookies) to work
 - Accept requests from your Netlify frontend URL
 - Work in development mode (localhost)
@@ -59,28 +62,30 @@ cd services/backend
 ## How CORS Works with Credentials
 
 ### ❌ Wrong (What you had):
+
 ```javascript
 cors({
-  origin: true,        // Allow ALL origins
-  credentials: true    // But also send cookies
-})
+  origin: true, // Allow ALL origins
+  credentials: true, // But also send cookies
+});
 // ✗ Browsers reject this - can't do both!
 ```
 
 ### ✅ Correct (What's fixed):
+
 ```javascript
 cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     const allowed = [
-      'https://your-domain.netlify.app',
-      'http://localhost:5000'
+      "https://your-domain.netlify.app",
+      "http://localhost:5000",
     ];
     if (allowed.includes(origin)) {
       callback(null, true);
     }
   },
-  credentials: true
-})
+  credentials: true,
+});
 // ✓ Browsers accept this - explicit origins + credentials
 ```
 
@@ -121,6 +126,7 @@ If login still fails, check:
 ## If Login Still Doesn't Work
 
 ### Check 1: Is Backend Running?
+
 ```bash
 curl -X POST https://your-backend-url/api/auth/login \
   -H "Content-Type: application/json" \
@@ -128,17 +134,22 @@ curl -X POST https://your-backend-url/api/auth/login \
 ```
 
 ### Check 2: Is FRONTEND_URL Correct?
+
 ```bash
 # In your backend logs, you should see which origins are accepted
 echo $FRONTEND_URL  # Should output your Netlify URL
 ```
 
 ### Check 3: Are Cookies Being Set?
+
 Check the login response in browser DevTools → Network → login request → Response Headers
+
 - Should see: `Set-Cookie: mindcare_auth=...`
 
 ### Check 4: Is Redirect Working?
+
 After successful login, you should be redirected to `/yoga.html`
+
 - Check the redirect in browser Network tab
 - Should see a 302 redirect or JavaScript redirect
 
@@ -147,7 +158,7 @@ After successful login, you should be redirected to `/yoga.html`
 ## Files Modified
 
 1. ✅ `apps/frontend/auth/login-page/script.js` - Fixed redirect path
-2. ✅ `apps/frontend/auth/script.js` - Updated redirect comment  
+2. ✅ `apps/frontend/auth/script.js` - Updated redirect comment
 3. ✅ `services/backend/server.js` - Fixed CORS configuration
 
 ---
@@ -155,6 +166,7 @@ After successful login, you should be redirected to `/yoga.html`
 ## Summary
 
 The main issue was **CORS credentials + Browser security**:
+
 - Browser won't send cookies with `origin: true`
 - You must specify exact origins that can receive cookies
 - Now that it's fixed, login should work! 🎉
