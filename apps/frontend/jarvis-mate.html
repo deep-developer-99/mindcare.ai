@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="assets/css/shared-profile.css" />
     <script src="assets/js/config.js"></script>
     <script>
-      // Auth guard - verify session before page loads
       (function () {
         const LOGIN_PAGE_URL = "/auth/login-page/index.html";
         const API_BASE = CONFIG.getApiBase();
@@ -25,11 +24,8 @@
           cache: "no-store",
         })
           .then((response) => {
-            if (response.ok) {
-              document.documentElement.style.visibility = "visible";
-            } else {
-              window.location.replace(LOGIN_PAGE_URL);
-            }
+            if (!response.ok) throw new Error("Unauthorized");
+            document.documentElement.style.visibility = "visible";
           })
           .catch(() => {
             window.location.replace(LOGIN_PAGE_URL);
