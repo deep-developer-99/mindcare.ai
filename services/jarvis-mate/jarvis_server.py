@@ -8,7 +8,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+# Configure CORS to allow frontend origins and credentials
+CORS(app, supports_credentials=True, origins=[
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "http://localhost:5002",
+    "http://127.0.0.1:5000",
+    "https://adorable-taiyaki-e8b484.netlify.app"
+])
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
