@@ -3,16 +3,16 @@ import os
 from datetime import datetime
 
 import google.generativeai as genai
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 from pymongo import MongoClient
 
-env_vars = dotenv_values(".env")
-GEMINI_API_KEY = env_vars.get("GEMINI_API_KEY")
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 else:
-    print("Error: GEMINI_API_KEY missing in .env")
+    print("Error: GEMINI_API_KEY missing")
 
 CHATLOG_FILE = "Data/ChatLog.json"
 MODEL_NAME = "gemini-2.5-flash-lite"
@@ -27,7 +27,7 @@ Keep your answers concise, human-like, and warm.
 
 # MongoDB Connection Setup
 try:
-    MONGO_URI = env_vars.get("MONGO_URI", "mongodb+srv://DEEP_MINDCARE:NPOWl9KnImbJ5h6n@cluster0.bhk1ylj.mongodb.net/mind-care?appName=Cluster0")
+    MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://DEEP_MINDCARE:NPOWl9KnImbJ5h6n@cluster0.bhk1ylj.mongodb.net/mind-care?appName=Cluster0")
     mongo_client = MongoClient(MONGO_URI)
     db = mongo_client['mind-care']
     jarvis_collection = db['JARVIS']
