@@ -1,12 +1,8 @@
 (function () {
   const IS_BLOG_PAGE = window.location.pathname.includes('/blog/');
-  const HOME_PAGE_URL = window.location.protocol === 'file:'
-    ? (IS_BLOG_PAGE ? '../Him2.html' : 'Him2.html')
-    : '/Him2.html';
-  const SETTINGS_PAGE_URL = window.location.protocol === 'file:'
-    ? (IS_BLOG_PAGE ? '../user-dashboard.html' : 'user-dashboard.html')
-    : '/user-dashboard.html';
-  const API_BASE = CONFIG ? CONFIG.getApiBase() : (window.location.protocol === 'file:' ? 'http://localhost:5002' : '');
+  const HOME_PAGE_URL = '/Him2.html';
+  const SETTINGS_PAGE_URL = '/user-dashboard.html';
+  const API_BASE = CONFIG.getApiBase();
   const LOGOUT_ENDPOINT = `${API_BASE}/api/auth/logout`;
 
   function closeProfileMenus(exceptRoot) {

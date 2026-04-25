@@ -27,7 +27,7 @@
   const resetConfirmPassword = document.getElementById('resetConfirmPassword');
   const devOtpHint = document.getElementById('devOtpHint');
 
-  const API_BASE = CONFIG ? CONFIG.getApiBase() : (window.location.protocol === 'file:' ? 'http://localhost:5002' : '');
+  const API_BASE = CONFIG.getApiBase();
   const AUTH_BASE = `${API_BASE}/api/auth`;
   const FORGOT_REQUEST_ENDPOINT = `${AUTH_BASE}/forgot-password/request`;
   const FORGOT_VERIFY_ENDPOINT = `${AUTH_BASE}/forgot-password/verify`;

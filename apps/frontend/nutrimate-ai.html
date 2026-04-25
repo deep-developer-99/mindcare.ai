@@ -10,9 +10,7 @@
     <script src="assets/js/config.js"></script>
     <script>
         (function () {
-            const LOGIN_PAGE_URL = window.location.protocol === 'file:'
-                ? 'auth/login-page/index.html'
-                : '/auth/login-page/index.html';
+            const LOGIN_PAGE_URL = '/auth/login-page/index.html';
             const API_BASE = CONFIG.getApiBase();
             document.documentElement.style.visibility = 'hidden';
 

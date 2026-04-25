@@ -1,6 +1,6 @@
 (function () {
   const IS_BLOG_PAGE = window.location.pathname.includes('/blog/');
-  const API_BASE = CONFIG ? CONFIG.getApiBase() : (window.location.protocol === 'file:' ? 'http://localhost:5002' : '');
+  const API_BASE = CONFIG.getApiBase();
   const OPEN_ASSISTANT_ENDPOINT = `${API_BASE}/api/assistant/open`;
 
   const ASSISTANT_LABEL = {

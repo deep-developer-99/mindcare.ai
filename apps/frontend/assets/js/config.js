@@ -27,10 +27,10 @@ const CONFIG = {
 
   // Detect environment and return appropriate config
   getEnvironment: function() {
-    if (window.location.protocol === 'file:' || window.location.hostname === 'localhost') {
-      return 'DEVELOPMENT';
-    }
-    return 'PRODUCTION';
+    const host = window.location.hostname;
+    // Development: localhost, 127.0.0.1, or ::1 (IPv6 loopback)
+    const isDev = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+    return isDev ? 'DEVELOPMENT' : 'PRODUCTION';
   },
 
   // Get appropriate base URL for a service
