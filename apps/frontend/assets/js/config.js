@@ -20,9 +20,9 @@ const CONFIG = {
 
   // ===== PRODUCTION (Update with your deployment URLs) =====
   PRODUCTION: {
-    BACKEND: 'https://backend-api.mindcare.com',      // ← Update this
-    JARVIS_MATE: 'https://jarvis-api.mindcare.com',   // ← Update this
-    NUTRIMATE: 'https://nutrimate-api.mindcare.com'   // ← Update this
+    BACKEND: 'https://mindcare-backend-gvhh.onrender.com',      // ← Update this
+    JARVIS_MATE: 'https://mindcare-mate-ai.onrender.com',   // ← Update this
+    NUTRIMATE: 'https://mindcare-nutrimate-ai.onrender.com'   // ← Update this
   },
 
   // Detect environment and return appropriate config

@@ -5,6 +5,7 @@ type: project
 ---
 
 **Issue**: Hardcoded `localhost:5002` references in:
+
 - Him2.html (lines 1113, 1223)
 - jarvis-mate.html (line 351)
 - nutrimate-ai.html (line 15)

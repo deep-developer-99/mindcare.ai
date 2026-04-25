@@ -9,6 +9,7 @@ All API calls now use a centralized configuration system. This makes deployment 
 **File**: `apps/frontend/assets/js/config.js`
 
 The config automatically detects the environment:
+
 - **Development** (running locally): Uses `http://localhost:5002`
 - **Production** (deployed): Uses your production API endpoint
 
@@ -18,25 +19,28 @@ When you're ready to deploy, update the production endpoint in `config.js`:
 
 ```javascript
 PRODUCTION: {
-  API_BASE: 'https://your-api-domain.com' // ← UPDATE THIS
+  API_BASE: "https://your-api-domain.com"; // ← UPDATE THIS
 }
 ```
 
 #### Examples:
 
 **If your API is on Railway.app:**
+
 ```javascript
-API_BASE: 'https://mindcare-api-prod.up.railway.app'
+API_BASE: "https://mindcare-api-prod.up.railway.app";
 ```
 
 **If your API is on Heroku:**
+
 ```javascript
-API_BASE: 'https://mindcare-api-prod.herokuapp.com'
+API_BASE: "https://mindcare-api-prod.herokuapp.com";
 ```
 
 **If your API is on your own domain:**
+
 ```javascript
-API_BASE: 'https://api.mindcare.com'
+API_BASE: "https://api.mindcare.com";
 ```
 
 ### Endpoints Being Used
@@ -92,15 +96,18 @@ getApiBase: function() {
 ### Troubleshooting
 
 **Error: "Server is not reachable"**
+
 - Check that API_BASE is correct in config.js
 - Verify backend server is running
 - Check CORS settings on backend
 
 **Error: "Network error"**
+
 - Check API endpoint is accessible from the internet
 - Test with curl: `curl https://your-api-domain.com/api/auth/verify`
 
 **API calls work locally but fail in production**
+
 - Backend might have CORS restrictions
 - Ensure backend accepts requests from your Netlify domain
 - Add to backend CORS: `https://your-domain.netlify.app`

@@ -51,6 +51,7 @@ PRODUCTION: {
 ### Step 1: Deploy All 3 Backend Services
 
 #### **Backend Service** (Node.js)
+
 ```bash
 # Services location: services/backend/
 
@@ -60,6 +61,7 @@ PRODUCTION: {
 ```
 
 #### **Jarvis-Mate Service** (Python)
+
 ```bash
 # Services location: services/jarvis-mate/
 
@@ -69,6 +71,7 @@ PRODUCTION: {
 ```
 
 #### **NutriMate Service** (Python)
+
 ```bash
 # Services location: services/nutrimate/
 
@@ -150,6 +153,7 @@ git push origin main
 ## Deployment Checklist
 
 ### Backend Service Deployment
+
 - [ ] Code deployed to Railway/Heroku
 - [ ] Environment variables configured (.env)
 - [ ] MongoDB URI configured
@@ -160,6 +164,7 @@ git push origin main
 - [ ] Copy the service URL (e.g., `https://mindcare-backend.railway.app`)
 
 ### Jarvis-Mate Service Deployment
+
 - [ ] Code deployed to Railway/Heroku
 - [ ] All dependencies installed
 - [ ] Service starts on correct port
@@ -167,6 +172,7 @@ git push origin main
 - [ ] Copy the service URL (e.g., `https://mindcare-jarvis.railway.app`)
 
 ### NutriMate Service Deployment
+
 - [ ] Code deployed to Railway/Heroku
 - [ ] All dependencies installed
 - [ ] Service starts on correct port
@@ -174,6 +180,7 @@ git push origin main
 - [ ] Copy the service URL (e.g., `https://mindcare-nutrimate.railway.app`)
 
 ### Frontend Deployment
+
 - [ ] Update 3 URLs in `config.js`
 - [ ] Test each API from frontend:
   - [ ] Login/Signup works (Backend)
@@ -188,6 +195,7 @@ git push origin main
 ## Environment Variable Example (.env)
 
 ### Backend (.env)
+
 ```
 PORT=5002
 MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/mindcare
@@ -195,6 +203,7 @@ JWT_SECRET=your-secret-key
 ```
 
 ### Jarvis-Mate (.env)
+
 ```
 PORT=5003
 FLASK_ENV=production
@@ -202,6 +211,7 @@ API_KEY=your-ai-api-key
 ```
 
 ### NutriMate (.env)
+
 ```
 PORT=5004
 FLASK_ENV=production
@@ -212,27 +222,31 @@ FLASK_ENV=production
 ## Troubleshooting
 
 ### Frontend Shows "Network Error"
+
 - Check if all 3 service URLs are correct in `config.js`
 - Verify each service is deployed and running
 - Check browser console for CORS errors
 
 ### Chat Not Working (Jarvis)
+
 - Verify `CONFIG.getJarvisUrl()` points to correct service
 - Test: `curl -X POST https://jarvis-url/api/chat -d '{"message":"hi"}'`
 - Check service logs for errors
 
 ### Diet Plan Not Working (NutriMate)
+
 - Verify `CONFIG.getNutrimateUrl()` points to correct service
 - Test: `curl -X POST https://nutrimate-url/api/diet -d '{...}'`
 - Ensure all required fields are sent
 
 ### CORS Error
+
 - Add frontend URL to CORS whitelist in backend:
   ```javascript
   cors({
-    origin: 'https://your-domain.netlify.app',
-    credentials: true
-  })
+    origin: "https://your-domain.netlify.app",
+    credentials: true,
+  });
   ```
 
 ---
@@ -242,13 +256,14 @@ FLASK_ENV=production
 In any JavaScript file, you can use:
 
 ```javascript
-CONFIG.getBackendUrl()      // Gets Backend URL
-CONFIG.getJarvisUrl()       // Gets Jarvis-Mate URL
-CONFIG.getNutrimateUrl()    // Gets NutriMate URL
-CONFIG.getEnvironment()     // Returns 'DEVELOPMENT' or 'PRODUCTION'
+CONFIG.getBackendUrl(); // Gets Backend URL
+CONFIG.getJarvisUrl(); // Gets Jarvis-Mate URL
+CONFIG.getNutrimateUrl(); // Gets NutriMate URL
+CONFIG.getEnvironment(); // Returns 'DEVELOPMENT' or 'PRODUCTION'
 ```
 
 Example usage:
+
 ```javascript
 const chatUrl = `${CONFIG.getJarvisUrl()}/api/chat`;
 const dietUrl = `${CONFIG.getNutrimateUrl()}/api/diet`;
@@ -288,11 +303,11 @@ Frontend will auto-detect local ports and use DEVELOPMENT config.
 
 ## Summary
 
-| Service | Type | Port (Local) | Endpoints |
-|---------|------|--------|-----------|
-| **Backend** | Node.js | 5002 | `/api/auth/*`, `/api/newsletter/*` |
-| **Jarvis-Mate** | Python | 5003 | `/api/chat` |
-| **NutriMate** | Python | 5004 | `/api/diet` |
-| **Frontend** | Static | - | Deployed on Netlify |
+| Service         | Type    | Port (Local) | Endpoints                          |
+| --------------- | ------- | ------------ | ---------------------------------- |
+| **Backend**     | Node.js | 5002         | `/api/auth/*`, `/api/newsletter/*` |
+| **Jarvis-Mate** | Python  | 5003         | `/api/chat`                        |
+| **NutriMate**   | Python  | 5004         | `/api/diet`                        |
+| **Frontend**    | Static  | -            | Deployed on Netlify                |
 
 Update `config.js` with production URLs and you're ready to go! 🚀
