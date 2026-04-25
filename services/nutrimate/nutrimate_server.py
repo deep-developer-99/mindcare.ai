@@ -1,7 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+from dotenv import load_dotenv
 from nutrimate import generate_diet, calculate_bmi, bmi_type
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)

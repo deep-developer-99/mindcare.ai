@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
+const assistantRoutes = require('./routes/assistantRoutes');
 
 const app = express();
 
@@ -49,6 +50,7 @@ const path = require('path');
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/assistant', assistantRoutes);
 
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, '../../apps/frontend')));
